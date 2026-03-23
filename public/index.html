@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es" data-base="">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div id="header"></div>
+
+    <main>
+      <!-- ═══════════ HERO INMERSIVO ═══════════ -->
+      <section class="hero" data-testid="section-hero">
+        <div class="hero-bg">
+          <img src="assets/img/imagen-principal.png" />
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+          <div class="hero-body">
+            <span
+              class="hero-eyebrow hero-anim hero-anim--1"
+              data-testid="text-hero-eyebrow"
+              >Organiza tu cocina cada semana</span
+            >
+            <h1 class="hero-anim hero-anim--2">
+              Descubre recetas,<br />planifica tu menú
+            </h1>
+            <p class="hero-sub hero-anim hero-anim--3">
+              Explora nuevas recetas, organiza tus comidas semanales y prepara
+              tu lista de la compra de forma sencilla desde un solo lugar.
+            </p>
+            <div class="hero-actions hero-anim hero-anim--4">
+              <a
+                href=""
+                class="btn btn-primary btn-lg"
+                data-testid="button-solicitar-catalogo"
+                >Empieza ahora</a
+              >
+              <a
+                href=""
+                class="btn btn-outline-light btn-lg"
+                data-testid="button-explorar-catalogo"
+                >Descubrir recetas</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="hero-band">
+          <div class="container">
+            <div class="hero-band-inner">
+              <span class="hero-bullet" data-testid="text-bullet-b2b">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--accent)"
+                  stroke-width="2.5"
+                >
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                  />
+                </svg>
+                Menú semanal
+              </span>
+              <span class="hero-bullet-sep" aria-hidden="true"></span>
+              <span class="hero-bullet" data-testid="text-bullet-label">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--accent)"
+                  stroke-width="2.5"
+                >
+                  <path
+                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
+                  />
+                  <line x1="7" y1="7" x2="7.01" y2="7" />
+                </svg>
+                Lista de la compra
+              </span>
+              <span class="hero-bullet-sep" aria-hidden="true"></span>
+              <span class="hero-bullet" data-testid="text-bullet-cert">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--accent)"
+                  stroke-width="2.5"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Recetas
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-lines">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-label">QUÉ PUEDES HACER</span>
+            <h2>Todo lo que necesitas para organizar tus comidas</h2>
+            <p>
+              Encuentra inspiración, planifica tus recetas de la semana y crea
+              tu lista de la compra de forma rápida y sencilla.
+            </p>
+          </div>
+
+          <div class="lines-grid">
+            <div class="line-card">
+              <img
+                src="assets/img/ExplorarRecetas.png"
+                alt="Recetas variadas"
+              />
+              <div class="overlay">
+                <h3>Explora recetas</h3>
+                <p>
+                  Descubre platos fáciles, rápidos y variados para tu día a día.
+                </p>
+              </div>
+            </div>
+
+            <div class="line-card">
+              <img src="assets/img/PlanificaMenu.png" alt="Menú semanal" />
+              <div class="overlay">
+                <h3>Planifica tu menú</h3>
+                <p>
+                  Organiza tus comidas semanales y ten siempre claro qué vas a
+                  cocinar.
+                </p>
+              </div>
+            </div>
+
+            <div class="line-card">
+              <img src="assets/img/ListaCompra.png" alt="Lista de la compra" />
+              <div class="overlay">
+                <h3>Crea tu lista de la compra</h3>
+                <p>
+                  Genera automáticamente los ingredientes que necesitas para tus
+                  recetas.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="recipes-section">
+        <div class="container">
+          <div class="recipes-header">
+            <span class="section-label">RECETAS</span>
+            <h2>Encuentra tu próxima receta</h2>
+            <p>
+              Busca recetas por nombre y descubre nuevas ideas para tu menú
+              semanal.
+            </p>
+          </div>
+
+          <div class="recipes-search">
+            <input
+              type="text"
+              id="recipeSearchInput"
+              placeholder="Busca una receta, por ejemplo: pasta"
+            />
+            <button id="recipeSearchBtn" class="btn btn-primary">Buscar</button>
+          </div>
+
+          <div id="recipesMessage" class="recipes-message"></div>
+
+          <div id="recipesContainer" class="recipes-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+    <div class="auth-modal-overlay" id="authModal">
+  <div class="auth-modal">
+    <button class="auth-modal-close" id="closeAuthModal" aria-label="Cerrar">
+      ×
+    </button>
+
+    <div class="auth-modal-content">
+      <span class="auth-modal-eyebrow">Bienvenido a Plan Eat</span>
+      <h2>Organiza tus recetas de forma fácil</h2>
+      <p>
+        Inicia sesión para guardar tus recetas favoritas, planificar tu menú
+        semanal y crear tu lista de la compra.
+      </p>
+
+      <div class="auth-modal-actions">
+        <a href="/Usuario/login.html" class="btn btn-primary btn-lg">Iniciar sesión</a>
+        <a href="/Usuario/registro.html" class="btn auth-btn-secondary btn-lg">Registrarte</a>
+      </div>
+    </div>
+  </div>
+</div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
