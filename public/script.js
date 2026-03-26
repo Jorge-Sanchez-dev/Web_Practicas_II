@@ -1,29 +1,108 @@
 function initAuthModal() {
-  const modal = document.getElementById("authModal");
-  const openBtn = document.getElementById("openAuthModal");
-  const closeBtn = document.getElementById("closeAuthModal");
+  const authModal = document.getElementById("authModal");
+  const loginModal = document.getElementById("loginModal");
+  const registerModal = document.getElementById("registerModal");
 
-  if (!modal || !openBtn) return;
+  const openButtons = document.querySelectorAll(".open-auth-modal");
+  const closeMainBtn = document.getElementById("closeAuthModal");
 
-  // 👉 ABRIR
-  openBtn.addEventListener("click", () => {
-    modal.style.display = "flex";
+  const openLoginBtn = document.getElementById("openLoginModal");
+  const openRegisterBtn = document.getElementById("openRegisterModal");
+
+  const switchToRegister = document.getElementById("switchToRegister");
+  const switchToLogin = document.getElementById("switchToLogin");
+
+  function openModal(modal) {
+    if (!modal) return;
+    modal.classList.add("active");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove("active");
+
+    const anyOpen = document.querySelector(
+      ".auth-modal-overlay.active, .auth-panel-overlay.active"
+    );
+
+    if (!anyOpen) {
+      document.body.classList.remove("modal-open");
+    }
+  }
+
+  function showMainModal() {
+    authModal?.classList.add("active");
+    loginModal?.classList.remove("active");
+    registerModal?.classList.remove("active");
+    document.body.classList.add("modal-open");
+  }
+
+  function showLoginModal() {
+    authModal?.classList.remove("active");
+    loginModal?.classList.add("active");
+    registerModal?.classList.remove("active");
+    document.body.classList.add("modal-open");
+  }
+
+  function showRegisterModal() {
+    authModal?.classList.remove("active");
+    loginModal?.classList.remove("active");
+    registerModal?.classList.add("active");
+    document.body.classList.add("modal-open");
+  }
+
+  openButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openModal(authModal);
+    });
   });
 
-  // 👉 CERRAR con botón
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      modal.style.display = "none";
+  if (closeMainBtn) {
+    closeMainBtn.addEventListener("click", () => {
+      closeModal(authModal);
     });
   }
 
-  // 👉 CERRAR clic fuera
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
+  if (openLoginBtn) {
+    openLoginBtn.addEventListener("click", showLoginModal);
+  }
+
+  if (openRegisterBtn) {
+    openRegisterBtn.addEventListener("click", showRegisterModal);
+  }
+
+  if (switchToRegister) {
+    switchToRegister.addEventListener("click", showRegisterModal);
+  }
+
+  if (switchToLogin) {
+    switchToLogin.addEventListener("click", showLoginModal);
+  }
+
+  document.querySelectorAll("[data-back-to-main]").forEach((btn) => {
+    btn.addEventListener("click", showMainModal);
+  });
+
+  document.querySelectorAll("[data-close-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-close-modal");
+      const modal = document.getElementById(targetId);
+      closeModal(modal);
+    });
+  });
+
+  [authModal, loginModal, registerModal].forEach((modal) => {
+    if (!modal) return;
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal(modal);
+      }
+    });
   });
 }
+
 async function loadComponent(id, file) {
   const element = document.getElementById(id);
   if (!element) return;
@@ -130,3 +209,4 @@ async function initLayout() {
 }
 
 initLayout();
+

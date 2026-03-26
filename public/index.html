@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="es" data-base="">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan Eat</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
 
@@ -8,42 +11,52 @@
     <div id="header"></div>
 
     <main>
-      <!-- ═══════════ HERO INMERSIVO ═══════════ -->
       <section class="hero" data-testid="section-hero">
         <div class="hero-bg">
-          <img src="assets/img/imagen-principal.png" />
+          <img
+            src="assets/img/imagen-principal.png"
+            alt="Imagen principal Plan Eat"
+          />
         </div>
         <div class="hero-overlay"></div>
+
         <div class="container">
           <div class="hero-body">
             <span
               class="hero-eyebrow hero-anim hero-anim--1"
               data-testid="text-hero-eyebrow"
-              >Organiza tu cocina cada semana</span
             >
+              Organiza tu cocina cada semana
+            </span>
+
             <h1 class="hero-anim hero-anim--2">
               Descubre recetas,<br />planifica tu menú
             </h1>
+
             <p class="hero-sub hero-anim hero-anim--3">
               Explora nuevas recetas, organiza tus comidas semanales y prepara
               tu lista de la compra de forma sencilla desde un solo lugar.
             </p>
+
             <div class="hero-actions hero-anim hero-anim--4">
-              <a
-                href=""
-                class="btn btn-primary btn-lg"
-                data-testid="button-solicitar-catalogo"
-                >Empieza ahora</a
+              <button
+                type="button"
+                class="btn btn-primary btn-lg open-auth-modal"
               >
+                Empieza ahora
+              </button>
+
               <a
-                href=""
+                href="#recipesSection"
                 class="btn btn-outline-light btn-lg"
                 data-testid="button-explorar-catalogo"
-                >Descubrir recetas</a
               >
+                Descubrir recetas
+              </a>
             </div>
           </div>
         </div>
+
         <div class="hero-band">
           <div class="container">
             <div class="hero-band-inner">
@@ -62,7 +75,9 @@
                 </svg>
                 Menú semanal
               </span>
+
               <span class="hero-bullet-sep" aria-hidden="true"></span>
+
               <span class="hero-bullet" data-testid="text-bullet-label">
                 <svg
                   width="20"
@@ -79,7 +94,9 @@
                 </svg>
                 Lista de la compra
               </span>
+
               <span class="hero-bullet-sep" aria-hidden="true"></span>
+
               <span class="hero-bullet" data-testid="text-bullet-cert">
                 <svg
                   width="20"
@@ -147,7 +164,8 @@
           </div>
         </div>
       </section>
-      <section class="recipes-section">
+
+      <section class="recipes-section" id="recipesSection">
         <div class="container">
           <div class="recipes-header">
             <span class="section-label">RECETAS</span>
@@ -168,34 +186,220 @@
           </div>
 
           <div id="recipesMessage" class="recipes-message"></div>
-
           <div id="recipesContainer" class="recipes-grid"></div>
         </div>
       </section>
     </main>
 
     <div id="footer"></div>
+
+    <!-- MODAL PRINCIPAL -->
     <div class="auth-modal-overlay" id="authModal">
-  <div class="auth-modal">
-    <button class="auth-modal-close" id="closeAuthModal" aria-label="Cerrar">
-      ×
-    </button>
+      <div class="auth-modal">
+        <button
+          class="auth-modal-close"
+          id="closeAuthModal"
+          aria-label="Cerrar"
+          type="button"
+        >
+          ×
+        </button>
 
-    <div class="auth-modal-content">
-      <span class="auth-modal-eyebrow">Bienvenido a Plan Eat</span>
-      <h2>Organiza tus recetas de forma fácil</h2>
-      <p>
-        Inicia sesión para guardar tus recetas favoritas, planificar tu menú
-        semanal y crear tu lista de la compra.
-      </p>
+        <div class="auth-modal-content">
+          <span class="auth-modal-eyebrow">Bienvenido a Plan Eat</span>
+          <h2>Organiza tus recetas de forma fácil</h2>
+          <p>
+            Inicia sesión para guardar tus recetas favoritas, planificar tu menú
+            semanal y crear tu lista de la compra.
+          </p>
 
-      <div class="auth-modal-actions">
-        <a href="/Usuario/login.html" class="btn btn-primary btn-lg">Iniciar sesión</a>
-        <a href="/Usuario/registro.html" class="btn auth-btn-secondary btn-lg">Registrarte</a>
+          <div class="auth-modal-actions">
+            <button
+              type="button"
+              id="openLoginModal"
+              class="btn btn-primary btn-lg"
+            >
+              Iniciar sesión
+            </button>
+
+            <button
+              type="button"
+              id="openRegisterModal"
+              class="btn auth-btn-secondary btn-lg"
+            >
+              Registrarte
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <!-- MODAL LOGIN -->
+    <div class="auth-panel-overlay" id="loginModal">
+      <section class="auth-card auth-card-modal">
+        <button
+          class="auth-panel-close"
+          data-close-modal="loginModal"
+          aria-label="Cerrar"
+          type="button"
+        >
+          ×
+        </button>
+
+        <div class="auth-card-left">
+          <span class="auth-eyebrow">Plan Eat</span>
+          <h1>Bienvenido de nuevo</h1>
+          <p>
+            Inicia sesión para guardar tus recetas favoritas, organizar tu menú
+            semanal y tener tu lista de la compra siempre a mano.
+          </p>
+
+          <button
+            type="button"
+            class="auth-back-link auth-switch-btn"
+            data-back-to-main
+          >
+            ← Volver
+          </button>
+        </div>
+
+        <div class="auth-card-right">
+          <h2>Iniciar sesión</h2>
+
+          <form class="auth-form">
+            <div class="form-group">
+              <label for="loginEmail">Correo electrónico</label>
+              <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                placeholder="Introduce tu correo"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Contraseña</label>
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                placeholder="Introduce tu contraseña"
+                required
+              />
+            </div>
+
+            <button type="submit" class="auth-btn auth-btn-primary">
+              Entrar
+            </button>
+          </form>
+
+          <p class="auth-alt-text">
+            ¿Todavía no tienes cuenta?
+            <button
+              type="button"
+              class="auth-inline-link"
+              id="switchToRegister"
+            >
+              Regístrate
+            </button>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- MODAL REGISTRO -->
+    <div class="auth-panel-overlay" id="registerModal">
+      <section class="auth-card auth-card-modal">
+        <button
+          class="auth-panel-close"
+          data-close-modal="registerModal"
+          aria-label="Cerrar"
+          type="button"
+        >
+          ×
+        </button>
+
+        <div class="auth-card-left">
+          <span class="auth-eyebrow">Plan Eat</span>
+          <h1>Crea tu cuenta</h1>
+          <p>
+            Regístrate para descubrir recetas, organizar tus comidas y generar
+            tu lista de la compra de forma rápida y sencilla.
+          </p>
+
+          <button
+            type="button"
+            class="auth-back-link auth-switch-btn"
+            data-back-to-main
+          >
+            ← Volver
+          </button>
+        </div>
+
+        <div class="auth-card-right">
+          <h2>Registrarte</h2>
+
+          <form class="auth-form">
+            <div class="form-group">
+              <label for="registerName">Nombre</label>
+              <input
+                type="text"
+                id="registerName"
+                name="name"
+                placeholder="Introduce tu nombre"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerEmail">Correo electrónico</label>
+              <input
+                type="email"
+                id="registerEmail"
+                name="email"
+                placeholder="Introduce tu correo"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerPassword">Contraseña</label>
+              <input
+                type="password"
+                id="registerPassword"
+                name="password"
+                placeholder="Crea una contraseña"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirmar contraseña</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Repite la contraseña"
+                required
+              />
+            </div>
+
+            <button type="submit" class="auth-btn auth-btn-primary">
+              Crear cuenta
+            </button>
+          </form>
+
+          <p class="auth-alt-text">
+            ¿Ya tienes cuenta?
+            <button type="button" class="auth-inline-link" id="switchToLogin">
+              Inicia sesión
+            </button>
+          </p>
+        </div>
+      </section>
+    </div>
+
     <script type="module" src="script.js"></script>
   </body>
 </html>
