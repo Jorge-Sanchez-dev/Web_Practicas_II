@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de la compra</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <section class="shopping-list-section">
+    <div class="container">
+      <div class="shopping-header">
+      <span class="section-label">LISTA DE LA COMPRA</span>
+      <h2>Tu compra semanal</h2>
+      <p>
+        Aquí puedes ver todos los ingredientes que necesitas para tus recetas y
+        marcar los que ya has comprado.
+      </p>
+    </div>
+
+    <div class="shopping-topbar">
+      <div class="shopping-search">
+        <input
+          type="text"
+          placeholder="Buscar ingrediente..."
+          id="searchIngredient"
+        />
+      </div>
+
+      <div class="shopping-actions">
+        <button class="btn btn-outline">Vaciar lista</button>
+        <button class="btn btn-primary">Añadir producto</button>
+      </div>
+    </div>
+
+    <div class="shopping-list-card">
+      <div class="shopping-list-head">
+        <span>Producto</span>
+        <span>Cantidad</span>
+        <span>Estado</span>
+      </div>
+
+      <div class="shopping-item">
+        <label class="shopping-product">
+          <input type="checkbox" />
+          <span>Tomates</span>
+        </label>
+        <span class="shopping-qty">6 unidades</span>
+        <span class="shopping-status pending">Pendiente</span>
+      </div>
+
+      <div class="shopping-item">
+        <label class="shopping-product">
+          <input type="checkbox" />
+          <span>Arroz</span>
+        </label>
+        <span class="shopping-qty">1 kg</span>
+        <span class="shopping-status pending">Pendiente</span>
+      </div>
+
+      <div class="shopping-item checked">
+        <label class="shopping-product">
+          <input type="checkbox" checked />
+          <span>Leche</span>
+        </label>
+        <span class="shopping-qty">2 litros</span>
+        <span class="shopping-status bought">Comprado</span>
+      </div>
+
+      <div class="shopping-item">
+        <label class="shopping-product">
+          <input type="checkbox" />
+          <span>Pechuga de pollo</span>
+        </label>
+        <span class="shopping-qty">500 g</span>
+        <span class="shopping-status pending">Pendiente</span>
+      </div>
+
+      <div class="shopping-item checked">
+        <label class="shopping-product">
+          <input type="checkbox" checked />
+          <span>Huevos</span>
+        </label>
+        <span class="shopping-qty">12 unidades</span>
+        <span class="shopping-status bought">Comprado</span>
+      </div>
+    </div>
+  </div>
+</section>

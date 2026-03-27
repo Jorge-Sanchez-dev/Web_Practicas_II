@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú semanal</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <section class="weekly-menu-section">
+    <div class="container">
+      <div class="weekly-menu-header">
+        <span class="section-label">MENÚ SEMANAL</span>
+        <h2>Organiza tus comidas de la semana</h2>
+        <p>
+          Consulta tu planificación semanal y navega entre semanas para organizar
+          tus recetas de forma sencilla.
+        </p>
+      </div>
+
+      <div class="weekly-nav">
+        <button id="prevWeekBtn" class="week-btn">← Semana anterior</button>
+        <div class="week-range" id="weekRange">24 mar - 30 mar</div>
+        <button id="nextWeekBtn" class="week-btn">Semana siguiente →</button>
+      </div>
+
+      <div class="weekly-calendar" id="weeklyCalendar">
+        <!-- Los días se generan con JS -->
+      </div>
+    </div>
+  </section>
+
+  <script src="./script.js"></script>
+</body>
+</html>

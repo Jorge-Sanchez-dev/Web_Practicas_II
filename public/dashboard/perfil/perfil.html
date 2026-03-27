@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+    <div id="header"></div>
+    <button onclick="window.location.href='../dashboard.html'">Volver al inicio</button>
+  <section class="profile-section">
+    <div class="container">
+      <div class="profile-header">
+        <span class="section-label">PERFIL</span>
+        <h2>Tu progreso personal</h2>
+      <p>   
+        Consulta tus datos personales y sigue la evolución de tu peso de forma
+        sencilla.
+      </p>
+    </div>
+
+    <div class="profile-grid">
+      <!-- Tarjeta principal -->
+      <div class="profile-card main-profile-card">
+        <div class="profile-top">
+          <div class="profile-avatar">J</div>
+
+          <div class="profile-main-info">
+            <h3>Jorge Sánchez López</h3>
+            <p>22 años</p>
+            <p>jorgesl099@gmail.com</p>
+            <span class="profile-goal">Objetivo: Perder peso</span>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="detail-label">Altura</span>
+            <span class="detail-value">1,78 m</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Peso actual</span>
+            <span class="detail-value">79 kg</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Peso objetivo</span>
+            <span class="detail-value">74 kg</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Actividad</span>
+            <span class="detail-value">Moderada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas resumen -->
+      <div class="profile-stats">
+        <div class="profile-card stat-card">
+          <span class="stat-label">Peso actual</span>
+          <strong>79 kg</strong>
+        </div>
+
+        <div class="profile-card stat-card">
+          <span class="stat-label">Peso objetivo</span>
+          <strong>74 kg</strong>
+        </div>
+
+        <div class="profile-card stat-card">
+          <span class="stat-label">Cambio total</span>
+          <strong>-3 kg</strong>
+        </div>
+
+        <div class="profile-card stat-card">
+          <span class="stat-label">Progreso</span>
+          <strong>40%</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfica -->
+    <div class="profile-card chart-card">
+      <div class="card-header">
+        <h3>Evolución del peso</h3>
+        <p>Seguimiento semanal de tu progreso</p>
+      </div>
+
+      <div class="chart-placeholder">
+        <div class="chart-line">
+          <div class="chart-point" style="left: 5%; top: 30%;"></div>
+          <div class="chart-point" style="left: 25%; top: 40%;"></div>
+          <div class="chart-point" style="left: 45%; top: 50%;"></div>
+          <div class="chart-point" style="left: 65%; top: 60%;"></div>
+          <div class="chart-point" style="left: 85%; top: 70%;"></div>
+
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline
+              points="5,30 25,40 45,50 65,60 85,70"
+              fill="none"
+              stroke="#f97316"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+
+        <div class="chart-labels">
+          <span>1 Mar</span>
+          <span>8 Mar</span>
+          <span>15 Mar</span>
+          <span>22 Mar</span>
+          <span>29 Mar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="profile-card history-card">
+      <div class="card-header">
+        <h3>Historial de peso</h3>
+        <p>Últimos registros guardados</p>
+      </div>
+
+      <div class="history-list">
+        <div class="history-row">
+          <span>1 marzo 2026</span>
+          <strong>82 kg</strong>
+        </div>
+        <div class="history-row">
+          <span>8 marzo 2026</span>
+          <strong>81,2 kg</strong>
+        </div>
+        <div class="history-row">
+          <span>15 marzo 2026</span>
+          <strong>80,1 kg</strong>
+        </div>
+        <div class="history-row">
+          <span>22 marzo 2026</span>
+          <strong>79,5 kg</strong>
+        </div>
+        <div class="history-row">
+          <span>29 marzo 2026</span>
+          <strong>79 kg</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer"></div>
+
+    <script>
+      async function loadComponent(id, file) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const res = await fetch(file);
+        const html = await res.text();
+        el.innerHTML = html;
+      }
+
+      loadComponent("header", "../header.html");
+      loadComponent("footer", "../footer.html");
+    </script>
+</section>
