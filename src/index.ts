@@ -29,8 +29,10 @@ app.get("/api/recipes", async (req, res) => {
     const response = await fetch(url);
     const data = await response.json();
 
-    console.log("STATUS:", response.status);
-    console.log("DATA:", data);
+    // para probar si he llegado el limite de la API
+    //console.log("STATUS:", response.status);
+    //console.log("DATA:", data);
+
 
     if (!response.ok) {
       return res.status(response.status).json({

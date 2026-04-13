@@ -102,7 +102,7 @@ function initAuthModal() {
     });
   });
 }
-
+/*
 async function loadComponent(id, file) {
   const element = document.getElementById(id);
   if (!element) return;
@@ -114,7 +114,7 @@ async function loadComponent(id, file) {
   } catch (error) {
     console.error(`Error cargando ${file}:`, error);
   }
-}
+}*/
 
 function createRecipeCard(recipe) {
   return `
@@ -156,7 +156,7 @@ async function fetchRecipes(query = "pasta") {
       return;
     }
 
-    recipesMessage.textContent = `Se han encontrado ${data.results.length} recetas.`;
+    recipesMessage.textContent = `Se han encontrado ${data.results.length} recetas. (39 máximo)`;
 
     recipesContainer.innerHTML = data.results
       .map((recipe) => createRecipeCard(recipe))
@@ -189,9 +189,6 @@ function initRecipeSearch() {
 }
 
 async function initLayout() {
-  await loadComponent("header", "header.html");
-  await loadComponent("footer", "footer.html");
-
   const mobileBtn = document.querySelector(".mobile-menu-btn");
   const navLinks = document.querySelector(".nav-links");
 
@@ -208,5 +205,58 @@ async function initLayout() {
   initRecipeSearch();
 }
 
-initLayout();
+function getUser() {
+  return JSON.parse(localStorage.getItem("user"));
+}
 
+async function loadHeader() {
+  const header = document.getElementById("header");
+  if (!header) return;
+
+  const isDashboard = window.location.pathname.includes("/dashboard/");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  let file = "/header.html";
+
+  if (isDashboard) {
+    file = "/dashboard/header.html";
+  } else if (user) {
+    file = "/dashboard/header.html";
+  }
+
+  try {
+    const res = await fetch(file);
+    header.innerHTML = await res.text();
+  } catch (err) {
+    console.error("Error cargando header:", err);
+  }
+}
+
+async function loadFooter() {
+  const footer = document.getElementById("footer");
+  if (!footer) return;
+
+  const isDashboard = window.location.pathname.includes("/dashboard/");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  let file = "/footer.html";
+
+  if (isDashboard) {
+    file = "/dashboard/footer.html";
+  } else if (user) {
+    file = "/dashboard/footer.html";
+  }
+
+  try {
+    const res = await fetch(file);
+    footer.innerHTML = await res.text();
+  } catch (err) {
+    console.error("Error cargando footer:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadHeader();
+  await loadFooter();
+  initLayout();
+});
