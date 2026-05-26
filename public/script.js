@@ -363,13 +363,7 @@ async function loadFooter() {
   } catch (err) {
     console.error("Error cargando footer:", err);
   }
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadHeader();
-  await loadFooter();
-  initLayout();
-});
+};
 
 function initLogout() {
   const logoutBtn = document.getElementById("logoutBtn");
