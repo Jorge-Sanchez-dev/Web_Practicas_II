@@ -1108,7 +1108,7 @@ display: none;
 }
 
 .auth-card-modal .auth-card-right {
-  padding: 3.5rem 3rem;
+  padding: 4.5rem 3rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1202,8 +1202,8 @@ display: none;
 
 .auth-panel-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.5rem;
+  right: 1.5rem;
   width: 42px;
   height: 42px;
   border: none;
@@ -1274,4 +1274,58 @@ body.modal-open {
 
 html {
   scroll-behavior: smooth;
+}
+
+.auth-card-modal {
+  max-height: 90vh;
+}
+
+.auth-card-modal .auth-card-right {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.auth-card-modal .form-group input,
+.auth-card-modal .form-group select {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid #e7e5e4;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: 0.2s ease;
+  background: white;
+  color: #0f172a;
+}
+
+.auth-card-modal .form-group input:focus,
+.auth-card-modal .form-group select:focus {
+  border-color: #c85a24;
+  box-shadow: 0 0 0 3px rgba(200, 90, 36, 0.12);
+}
+
+.auth-card-modal .auth-form {
+  gap: 0.85rem;
+}
+
+.auth-card-modal .auth-card-right h2 {
+  margin-bottom: 1.2rem;
+}
+
+.auth-card-modal .form-group label {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-height: 760px) {
+  .auth-card-modal .auth-card-left {
+    padding: 2rem;
+  }
+
+  .auth-card-modal .auth-card-right {
+    padding: 4rem 2rem 2rem;
+  }
+}
+
+.auth-card-modal .auth-card-right {
+  padding-top: 5rem;
 }

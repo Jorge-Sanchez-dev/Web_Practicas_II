@@ -12,6 +12,20 @@ function initAuthModal() {
   const switchToRegister = document.getElementById("switchToRegister");
   const switchToLogin = document.getElementById("switchToLogin");
 
+  const edad = Number(document.getElementById("registerEdad").value);
+  const sexo = document.getElementById("registerSexo").value;
+  const altura = Number(document.getElementById("registerAltura").value);
+  const pesoActual = Number(
+    document.getElementById("registerPesoActual").value,
+  );
+  const pesoObjetivo = Number(
+    document.getElementById("registerPesoObjetivo").value,
+  );
+  const nivelActividad = document.getElementById(
+    "registerNivelActividad",
+  ).value;
+  const objetivo = document.getElementById("registerObjetivo").value;
+
   function openModal(modal) {
     if (!modal) return;
 
@@ -25,7 +39,7 @@ function initAuthModal() {
     modal.classList.remove("active");
 
     const anyOpen = document.querySelector(
-      ".auth-modal-overlay.active, .auth-panel-overlay.active"
+      ".auth-modal-overlay.active, .auth-panel-overlay.active",
     );
 
     if (!anyOpen) {
@@ -115,13 +129,9 @@ function initAuthModal() {
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const email = document
-        .getElementById("loginEmail")
-        .value.trim();
+      const email = document.getElementById("loginEmail").value.trim();
 
-      const password = document
-        .getElementById("loginPassword")
-        .value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
 
       try {
         const response = await fetch("/api/auth/login", {
@@ -130,8 +140,17 @@ function initAuthModal() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            name,
             email,
             password,
+            confirmPassword,
+            edad,
+            sexo,
+            altura,
+            pesoActual,
+            pesoObjetivo,
+            nivelActividad,
+            objetivo,
           }),
         });
 
@@ -160,17 +179,11 @@ function initAuthModal() {
     registerForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const name = document
-        .getElementById("registerName")
-        .value.trim();
+      const name = document.getElementById("registerName").value.trim();
 
-      const email = document
-        .getElementById("registerEmail")
-        .value.trim();
+      const email = document.getElementById("registerEmail").value.trim();
 
-      const password = document
-        .getElementById("registerPassword")
-        .value.trim();
+      const password = document.getElementById("registerPassword").value.trim();
 
       const confirmPassword = document
         .getElementById("confirmPassword")
@@ -249,7 +262,9 @@ async function fetchRecipes(query = "pasta") {
   recipesContainer.innerHTML = "";
 
   try {
-    const response = await fetch(`/api/recipes?query=${encodeURIComponent(query)}`);
+    const response = await fetch(
+      `/api/recipes?query=${encodeURIComponent(query)}`,
+    );
 
     if (!response.ok) {
       throw new Error("No se pudieron obtener las recetas");
@@ -363,7 +378,7 @@ async function loadFooter() {
   } catch (err) {
     console.error("Error cargando footer:", err);
   }
-};
+}
 
 function initLogout() {
   const logoutBtn = document.getElementById("logoutBtn");
