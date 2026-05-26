@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Recetas guardadas</title>
+
+  <!-- CSS global -->
+  <link rel="stylesheet" href="../styles.css" />
+
+  <!-- CSS propio -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <section class="saved-recipes-section">
+
+    <div class="container">
+
+      <div class="saved-header">
+        <span class="section-label">RECETAS GUARDADAS</span>
+
+        <h2>Tus recetas favoritas</h2>
+
+        <p>
+          Guarda tus recetas preferidas y accede rápidamente a ellas cuando
+          quieras planificar tu menú semanal.
+        </p>
+      </div>
+
+      <!-- Buscador -->
+      <div class="saved-topbar">
+
+        <div class="saved-search">
+          <input
+            type="text"
+            placeholder="Buscar receta..."
+            id="searchRecipe"
+          />
+        </div>
+
+      </div>
+
+      <!-- Grid recetas -->
+      <div class="saved-grid">
+
+        <!-- CARD -->
+        <article class="saved-card">
+
+          <img
+            src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+            alt="Ensalada saludable"
+          />
+
+          <div class="saved-card-content">
+
+            <span class="recipe-category">
+              Saludable
+            </span>
+
+            <h3>Ensalada mediterránea</h3>
+
+            <p>
+              Una receta ligera y fresca ideal para comidas rápidas y saludables.
+            </p>
+
+            <div class="recipe-meta">
+              <span>⏱ 15 min</span>
+              <span>⭐ 4.8</span>
+            </div>
+
+            <button class="btn btn-primary">
+              Ver receta
+            </button>
+
+          </div>
+        </article>
+
+        <!-- CARD -->
+        <article class="saved-card">
+
+          <img
+            src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd"
+            alt="Pasta"
+          />
+
+          <div class="saved-card-content">
+
+            <span class="recipe-category">
+              Pasta
+            </span>
+
+            <h3>Pasta cremosa</h3>
+
+            <p>
+              Pasta con salsa cremosa y verduras salteadas para cualquier ocasión.
+            </p>
+
+            <div class="recipe-meta">
+              <span>⏱ 25 min</span>
+              <span>⭐ 4.6</span>
+            </div>
+
+            <button class="btn btn-primary">
+              Ver receta
+            </button>
+
+          </div>
+        </article>
+
+        <!-- CARD -->
+        <article class="saved-card">
+
+          <img
+            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+            alt="Pollo"
+          />
+
+          <div class="saved-card-content">
+
+            <span class="recipe-category">
+              Proteína
+            </span>
+
+            <h3>Pollo al horno</h3>
+
+            <p>
+              Receta sencilla de pollo especiado acompañado de verduras.
+            </p>
+
+            <div class="recipe-meta">
+              <span>⏱ 40 min</span>
+              <span>⭐ 4.9</span>
+            </div>
+
+            <button class="btn btn-primary">
+              Ver receta
+            </button>
+
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <!-- CARGAR HEADER Y FOOTER -->
+  <script>
+    async function loadComponent(id, file) {
+      const el = document.getElementById(id);
+
+      if (!el) return;
+
+      const res = await fetch(file);
+      const html = await res.text();
+
+      el.innerHTML = html;
+    }
+
+    loadComponent("header", "../header.html");
+    loadComponent("footer", "../footer.html");
+  </script>
+
+</body>
+</html>
