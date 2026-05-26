@@ -295,10 +295,11 @@ function initRecipeSearch() {
 }
 
 async function initLayout() {
+  await loadHeader();
+  await loadFooter();
+
   const mobileBtn = document.querySelector(".mobile-menu-btn");
   const navLinks = document.querySelector(".nav-links");
-    await loadHeader();
-  await loadFooter();
 
   if (mobileBtn && navLinks) {
     mobileBtn.addEventListener("click", () => {
@@ -311,9 +312,12 @@ async function initLayout() {
 
   initAuthModal();
   initRecipeSearch();
-    initLayout();
   initLogout();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout();
+});
 
 async function loadHeader() {
   const header = document.getElementById("header");
