@@ -1276,14 +1276,6 @@ html {
   scroll-behavior: smooth;
 }
 
-.auth-card-modal {
-  max-height: 90vh;
-}
-
-.auth-card-modal .auth-card-right {
-  max-height: 90vh;
-  overflow-y: auto;
-}
 
 .auth-card-modal .form-group input,
 .auth-card-modal .form-group select {
@@ -1326,6 +1318,76 @@ html {
   }
 }
 
+/* MODAL REGISTRO MÁS COMPACTO */
+.auth-panel-overlay {
+  padding: 1rem;
+}
+
+.auth-card-modal {
+  max-width: 1050px;
+  max-height: 94vh;
+}
+
+.auth-card-modal .auth-card-left {
+  padding: 2.2rem 2.5rem;
+}
+
 .auth-card-modal .auth-card-right {
-  padding-top: 5rem;
+  padding: 2rem 2.5rem;
+  justify-content: center;
+  overflow: visible;
+  max-height: none;
+}
+
+.auth-card-modal .auth-card-right h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.auth-card-modal .auth-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem 1rem;
+}
+
+.auth-card-modal .form-group {
+  gap: 0.25rem;
+}
+
+.auth-card-modal .form-group label {
+  font-size: 0.85rem;
+}
+
+.auth-card-modal .form-group input,
+.auth-card-modal .form-group select {
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.auth-card-modal .auth-btn-primary {
+  grid-column: 1 / -1;
+  padding: 0.75rem 1rem;
+}
+
+.auth-alt-text {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.auth-panel-close {
+  top: 1rem;
+  right: 1rem;
+}
+
+/* En pantallas pequeñas sí dejamos una columna */
+@media (max-width: 820px) {
+  .auth-card-modal {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .auth-card-modal .auth-form {
+    grid-template-columns: 1fr;
+  }
 }
