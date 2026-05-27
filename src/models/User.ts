@@ -3,7 +3,13 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
     password: { type: String, required: true },
 
     edad: { type: Number, required: true },
@@ -15,10 +21,20 @@ const userSchema = new mongoose.Schema(
     objetivo: { type: String, required: true },
 
     fotoPerfil: { type: String, default: "" },
-    historialPeso: { type: [Number], default: [] },
+    historialPeso: {
+      type: [
+        {
+          peso: Number,
+          fecha: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+      default: [],
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
-  
 
 export default mongoose.model("User", userSchema);

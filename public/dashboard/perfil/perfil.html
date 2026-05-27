@@ -5,24 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Perfil</title>
 
-    <!-- CSS global -->
     <link rel="stylesheet" href="../styles.css" />
-
-    <!-- CSS propio -->
     <link rel="stylesheet" href="./styles.css" />
   </head>
 
   <body>
-    <!-- HEADER -->
     <div id="header"></div>
 
     <section class="profile-section">
       <div class="container">
         <div class="profile-header">
           <span class="section-label">PERFIL</span>
-
           <h2>Tu progreso personal</h2>
-
           <p>
             Consulta tus datos personales y sigue la evolución de tu peso de
             forma sencilla.
@@ -30,7 +24,6 @@
         </div>
 
         <div class="profile-grid">
-          <!-- Tarjeta principal -->
           <div class="profile-card main-profile-card">
             <div class="profile-top">
               <div class="profile-avatar" id="profileAvatar">J</div>
@@ -39,7 +32,6 @@
                 <h3 id="profileName"></h3>
                 <p id="profileAge"></p>
                 <p id="profileEmail"></p>
-
                 <span class="profile-goal" id="profileGoal"></span>
               </div>
             </div>
@@ -51,23 +43,24 @@
               </div>
 
               <div class="detail-item">
-                <span class="detail-label">Peso actual</span>
-                <span class="detail-value" id="profilePesoActual"></span>
-              </div>
-
-              <div class="detail-item">
-                <span class="detail-label">Peso objetivo</span>
-                <span class="detail-value" id="profilePesoObjetivo"></span>
-              </div>
-
-              <div class="detail-item">
                 <span class="detail-label">Actividad</span>
                 <span class="detail-value" id="profileActividad"></span>
               </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Peso inicial</span>
+                <span class="detail-value" id="profilePesoInicial"></span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Sexo</span>
+                <span class="detail-value" id="profileSexo"></span>
+              </div>
             </div>
+
+            <p class="profile-message" id="profileMessage"></p>
           </div>
 
-          <!-- Tarjetas resumen -->
           <div class="profile-stats">
             <div class="profile-card stat-card">
               <span class="stat-label">Peso actual</span>
@@ -80,7 +73,7 @@
             </div>
 
             <div class="profile-card stat-card">
-              <span class="stat-label">Cambio total</span>
+              <span class="stat-label">Cambio que se quiere lograr</span>
               <strong id="statCambioTotal"></strong>
             </div>
 
@@ -91,7 +84,6 @@
           </div>
         </div>
 
-        <!-- Gráfica -->
         <div class="profile-card chart-card">
           <div class="card-header">
             <h3>Evolución del peso</h3>
@@ -99,16 +91,12 @@
           </div>
 
           <div class="chart-placeholder">
-            <div class="chart-line">
-              <div class="chart-point" style="left: 5%; top: 30%"></div>
-              <div class="chart-point" style="left: 25%; top: 40%"></div>
-              <div class="chart-point" style="left: 45%; top: 50%"></div>
-              <div class="chart-point" style="left: 65%; top: 60%"></div>
-              <div class="chart-point" style="left: 85%; top: 70%"></div>
+            <div class="chart-y-labels" id="chartYLabels"></div>
 
+            <div class="chart-line" id="chartLine">
               <svg viewBox="0 0 100 100" preserveAspectRatio="none">
                 <polyline
-                  points="5,30 25,40 45,50 65,60 85,70"
+                  id="chartPolyline"
                   fill="none"
                   stroke="#f97316"
                   stroke-width="3"
@@ -118,129 +106,237 @@
               </svg>
             </div>
 
-            <div class="chart-labels">
-              <span>1 Mar</span>
-              <span>8 Mar</span>
-              <span>15 Mar</span>
-              <span>22 Mar</span>
-              <span>29 Mar</span>
-            </div>
+            <div class="chart-labels" id="chartLabels"></div>
           </div>
         </div>
 
-        <!-- Historial -->
         <div class="profile-card history-card">
           <div class="card-header">
             <h3>Historial de peso</h3>
             <p>Últimos registros guardados</p>
           </div>
 
-          <div class="history-list">
-            <div class="history-row">
-              <span>1 marzo 2026</span>
-              <strong>82 kg</strong>
-            </div>
-
-            <div class="history-row">
-              <span>8 marzo 2026</span>
-              <strong>81,2 kg</strong>
-            </div>
-
-            <div class="history-row">
-              <span>15 marzo 2026</span>
-              <strong>80,1 kg</strong>
-            </div>
-
-            <div class="history-row">
-              <span>22 marzo 2026</span>
-              <strong>79,5 kg</strong>
-            </div>
-
-            <div class="history-row">
-              <span>29 marzo 2026</span>
-              <strong>79 kg</strong>
-            </div>
-          </div>
+          <div class="history-list" id="historyList"></div>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
     <div id="footer"></div>
 
     <script>
-  async function loadProfile() {
-    const token = localStorage.getItem("token");
+      function getSortedHistory(historialPeso) {
+        if (!historialPeso || historialPeso.length === 0) return [];
 
-    if (!token) {
-      window.location.href = "../index.html";
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        localStorage.removeItem("token");
-        window.location.href = "../index.html";
-        return;
+        return [...historialPeso].sort(
+          (a, b) => new Date(a.fecha) - new Date(b.fecha)
+        );
       }
 
-      const user = data.user;
+      function renderWeightChart(historialPeso) {
+        const chartLine = document.getElementById("chartLine");
+        const polyline = document.getElementById("chartPolyline");
+        const labels = document.getElementById("chartLabels");
+        const yLabels = document.getElementById("chartYLabels");
 
-      document.getElementById("profileAvatar").textContent =
-        user.name?.charAt(0).toUpperCase() || "U";
+        if (!chartLine || !polyline || !labels || !yLabels) return;
 
-      document.getElementById("profileName").textContent = user.name || "";
-      document.getElementById("profileAge").textContent = user.age ? `${user.age} años` : "";
-      document.getElementById("profileEmail").textContent = user.email || "";
+        chartLine.querySelectorAll(".chart-point").forEach((p) => p.remove());
+        labels.innerHTML = "";
+        yLabels.innerHTML = "";
 
-      document.getElementById("profileGoal").textContent =
-        user.goal ? `Objetivo: ${user.goal}` : "";
+        const historialOrdenado = getSortedHistory(historialPeso);
 
-      document.getElementById("profileHeight").textContent =
-        user.height ? `${user.height} m` : "";
+        if (historialOrdenado.length === 0) {
+          labels.innerHTML = "<span>Sin registros</span>";
+          polyline.setAttribute("points", "");
+          return;
+        }
 
-      document.getElementById("profilePesoActual").textContent =
-        user.currentWeight ? `${user.currentWeight} kg` : "";
+        const pesos = historialOrdenado.map((item) => Number(item.peso));
+        const minPeso = Math.min(...pesos);
+        const maxPeso = Math.max(...pesos);
 
-      document.getElementById("profilePesoObjetivo").textContent =
-        user.targetWeight ? `${user.targetWeight} kg` : "";
+        for (let i = 0; i < 5; i++) {
+          const value = maxPeso - ((maxPeso - minPeso) / 4) * i;
+          const label = document.createElement("span");
+          label.textContent = `${value.toFixed(0)} kg`;
+          yLabels.appendChild(label);
+        }
 
-      document.getElementById("profileActividad").textContent =
-        user.activityLevel || "";
+        const points = historialOrdenado.map((item, index) => {
+          const peso = Number(item.peso);
 
-      document.getElementById("statPesoActual").textContent =
-        user.currentWeight ? `${user.currentWeight} kg` : "";
+          const x =
+            historialOrdenado.length === 1
+              ? 50
+              : (index / (historialOrdenado.length - 1)) * 90 + 5;
 
-      document.getElementById("statPesoObjetivo").textContent =
-        user.targetWeight ? `${user.targetWeight} kg` : "";
+          const y =
+            maxPeso === minPeso
+              ? 50
+              : 85 - ((peso - minPeso) / (maxPeso - minPeso)) * 70;
 
-      if (user.currentWeight && user.targetWeight) {
-        const cambio = user.targetWeight - user.currentWeight;
+          const point = document.createElement("div");
+          point.className = "chart-point";
+          point.style.left = `${x}%`;
+          point.style.top = `${y}%`;
+          chartLine.appendChild(point);
 
-        document.getElementById("statCambioTotal").textContent =
-          `${cambio > 0 ? "+" : ""}${cambio} kg`;
+          const label = document.createElement("span");
+          label.textContent = new Date(item.fecha).toLocaleDateString("es-ES", {
+            day: "numeric",
+            month: "short",
+          });
+          labels.appendChild(label);
+
+          return `${x},${y}`;
+        });
+
+        polyline.setAttribute("points", points.join(" "));
       }
 
-      document.getElementById("statProgreso").textContent = "0%";
+      function renderHistory(historialPeso) {
+        const historyList = document.getElementById("historyList");
 
-    } catch (error) {
-      console.error("Error cargando perfil:", error);
-    }
-  }
+        if (!historyList) return;
 
-  loadProfile();
-</script>
+        historyList.innerHTML = "";
 
-    <!-- CARGAR COMPONENTES -->
-    <script>
+        const historialOrdenado = getSortedHistory(historialPeso).sort(
+          (a, b) => new Date(b.fecha) - new Date(a.fecha)
+        );
+
+        if (historialOrdenado.length === 0) {
+          historyList.innerHTML = "<p>No hay registros de peso todavía.</p>";
+          return;
+        }
+
+        historialOrdenado.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "history-row";
+
+          const fecha = document.createElement("span");
+          fecha.textContent = new Date(item.fecha).toLocaleDateString("es-ES", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+
+          const peso = document.createElement("strong");
+          peso.textContent = `${item.peso} kg`;
+
+          row.appendChild(fecha);
+          row.appendChild(peso);
+
+          historyList.appendChild(row);
+        });
+      }
+
+      async function loadProfile() {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "../index.html";
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/auth/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            localStorage.removeItem("token");
+            window.location.href = "../index.html";
+            return;
+          }
+
+          const user = data.user;
+          const historialOrdenado = getSortedHistory(user.historialPeso);
+
+          let pesoInicial = null;
+          let pesoUltimo = null;
+
+          if (historialOrdenado.length > 0) {
+            pesoInicial = Number(historialOrdenado[0].peso);
+            pesoUltimo = Number(
+              historialOrdenado[historialOrdenado.length - 1].peso
+            );
+          }
+
+          renderWeightChart(user.historialPeso);
+          renderHistory(user.historialPeso);
+
+          document.getElementById("profileAvatar").textContent =
+            user.name?.charAt(0).toUpperCase() || "U";
+
+          document.getElementById("profileName").textContent = user.name || "";
+          document.getElementById("profileEmail").textContent =
+            user.email || "";
+
+          document.getElementById("profileAge").textContent = user.edad
+            ? `${user.edad} años`
+            : "";
+
+          document.getElementById("profileGoal").textContent = user.objetivo
+            ? `Objetivo: ${user.objetivo}`
+            : "";
+
+          document.getElementById("profileHeight").textContent = user.altura
+            ? `${user.altura} cm`
+            : "";
+
+          document.getElementById("profileActividad").textContent =
+            user.nivelActividad || "";
+
+          document.getElementById("profileSexo").textContent = user.sexo || "";
+
+          document.getElementById("profilePesoInicial").textContent =
+            pesoInicial !== null ? `${pesoInicial} kg` : "";
+
+          document.getElementById("statPesoActual").textContent =
+            pesoUltimo !== null ? `${pesoUltimo} kg` : "";
+
+          document.getElementById("statPesoObjetivo").textContent =
+            user.pesoObjetivo ? `${user.pesoObjetivo} kg` : "";
+
+          if (pesoInicial !== null && user.pesoObjetivo) {
+            const cambio = Number(user.pesoObjetivo) - pesoInicial;
+
+            document.getElementById("statCambioTotal").textContent =
+              `${cambio > 0 ? "+" : ""}${cambio} kg`;
+          }
+
+          if (
+            pesoInicial !== null &&
+            pesoUltimo !== null &&
+            user.pesoObjetivo
+          ) {
+            const pesoObjetivo = Number(user.pesoObjetivo);
+
+            const kilosAvanzados = pesoInicial - pesoUltimo;
+            const kilosObjetivo = pesoInicial - pesoObjetivo;
+
+            let progreso = (kilosAvanzados / kilosObjetivo) * 100;
+            progreso = Math.max(0, Math.min(100, progreso));
+
+            document.getElementById("statProgreso").textContent =
+              `${progreso.toFixed(0)}%`;
+
+            document.getElementById("profileMessage").textContent =
+              kilosAvanzados > 0
+                ? `Has perdido ${kilosAvanzados} kg desde que comenzaste. ¡Sigue así!`
+                : "Empieza hoy tu progreso y alcanza tu objetivo.";
+          }
+        } catch (error) {
+          console.error("Error cargando perfil:", error);
+        }
+      }
+
       async function loadComponent(id, file) {
         const el = document.getElementById(id);
         if (!el) return;
@@ -250,6 +346,7 @@
         el.innerHTML = html;
       }
 
+      loadProfile();
       loadComponent("header", "../header.html");
       loadComponent("footer", "../footer.html");
     </script>

@@ -108,7 +108,12 @@ app.post("/api/auth/register", async (req, res) => {
       objetivo,
 
       fotoPerfil: fotoPerfil || "",
-      historialPeso: [Number(pesoActual)],
+      historialPeso: [
+        {
+          peso: pesoActual,
+          fecha: new Date(),
+        },
+      ],
     });
 
     const token = jwt.sign(
