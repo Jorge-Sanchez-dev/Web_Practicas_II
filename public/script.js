@@ -173,6 +173,21 @@ function initAuthModal() {
   }
 
   // REGISTRO
+
+  const registerData = {
+  name: document.getElementById("registerName").value,
+  email: document.getElementById("registerEmail").value,
+  password: document.getElementById("registerPassword").value,
+  confirmPassword: document.getElementById("confirmPassword").value,
+  edad: document.getElementById("registerEdad").value,
+  sexo: document.getElementById("registerSexo").value,
+  altura: document.getElementById("registerAltura").value,
+  pesoActual: document.getElementById("registerPesoActual").value,
+  pesoObjetivo: document.getElementById("registerPesoObjetivo").value,
+  nivelActividad: document.getElementById("registerNivelActividad").value,
+  objetivo: document.getElementById("registerObjetivo").value,
+};
+
   const registerForm = document.getElementById("registerForm");
 
   if (registerForm) {
@@ -195,12 +210,7 @@ function initAuthModal() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-            confirmPassword,
-          }),
+          body: JSON.stringify(registerData),
         });
 
         const data = await response.json();

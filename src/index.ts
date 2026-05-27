@@ -25,11 +25,36 @@ mongoose
   .catch((error) => console.error("Error conectando MongoDB:", error));
 
 // REGISTRO
+// REGISTRO
 app.post("/api/auth/register", async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const {
+      name,
+      email,
+      password,
+      confirmPassword,
+      edad,
+      sexo,
+      altura,
+      pesoActual,
+      pesoObjetivo,
+      nivelActividad,
+      objetivo,
+    } = req.body;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !edad ||
+      !sexo ||
+      !altura ||
+      !pesoActual ||
+      !pesoObjetivo ||
+      !nivelActividad ||
+      !objetivo
+    ) {
       return res.status(400).json({
         error: "Todos los campos son obligatorios",
       });
@@ -38,6 +63,24 @@ app.post("/api/auth/register", async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({
         error: "Las contraseñas no coinciden",
+      });
+    }
+
+    if (Number(edad) <= 0) {
+      return res.status(400).json({
+        error: "La edad debe ser mayor que 0",
+      });
+    }
+
+    if (Number(altura) <= 0) {
+      return res.status(400).json({
+        error: "La altura debe ser mayor que 0",
+      });
+    }
+
+    if (Number(pesoActual) <= 0 || Number(pesoObjetivo) <= 0) {
+      return res.status(400).json({
+        error: "El peso debe ser mayor que 0",
       });
     }
 
@@ -55,6 +98,17 @@ app.post("/api/auth/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
+
+      edad: Number(edad),
+      sexo,
+      altura: Number(altura),
+      pesoActual: Number(pesoActual),
+      pesoObjetivo: Number(pesoObjetivo),
+      nivelActividad,
+      objetivo,
+
+      fotoPerfil: "",
+      historialPeso: [],
     });
 
     const token = jwt.sign(
@@ -73,6 +127,15 @@ app.post("/api/auth/register", async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        edad: user.edad,
+        sexo: user.sexo,
+        altura: user.altura,
+        pesoActual: user.pesoActual,
+        pesoObjetivo: user.pesoObjetivo,
+        nivelActividad: user.nivelActividad,
+        objetivo: user.objetivo,
+        fotoPerfil: user.fotoPerfil,
+        historialPeso: user.historialPeso,
       },
     });
   } catch (error) {
