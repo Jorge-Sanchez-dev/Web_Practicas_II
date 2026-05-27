@@ -165,20 +165,6 @@ function initAuthModal() {
 
   // REGISTRO
 
-  const registerData = {
-    name,
-    email,
-    password,
-    confirmPassword,
-    edad: document.getElementById("registerEdad").value,
-    sexo: document.getElementById("registerSexo").value,
-    altura: document.getElementById("registerAltura").value,
-    pesoActual: document.getElementById("registerPesoActual").value,
-    pesoObjetivo: document.getElementById("registerPesoObjetivo").value,
-    nivelActividad: document.getElementById("registerNivelActividad").value,
-    objetivo: document.getElementById("registerObjetivo").value,
-  };
-
   const registerForm = document.getElementById("registerForm");
 
   if (registerForm) {
@@ -196,6 +182,21 @@ function initAuthModal() {
         .value.trim();
 
       try {
+        const registerData = {
+          name,
+          email,
+          password,
+          confirmPassword,
+          edad: document.getElementById("registerEdad").value,
+          sexo: document.getElementById("registerSexo").value,
+          altura: document.getElementById("registerAltura").value,
+          pesoActual: document.getElementById("registerPesoActual").value,
+          pesoObjetivo: document.getElementById("registerPesoObjetivo").value,
+          nivelActividad: document.getElementById("registerNivelActividad")
+            .value,
+          objetivo: document.getElementById("registerObjetivo").value,
+        };
+
         const response = await fetch("/api/auth/register", {
           method: "POST",
           headers: {
@@ -340,13 +341,10 @@ async function loadHeader() {
   if (!header) return;
 
   const isDashboard = window.location.pathname.includes("/dashboard/");
-  const user = JSON.parse(localStorage.getItem("user"));
 
   let file = "/header.html";
 
   if (isDashboard) {
-    file = "/dashboard/header.html";
-  } else if (user) {
     file = "/dashboard/header.html";
   }
 
@@ -363,13 +361,10 @@ async function loadFooter() {
   if (!footer) return;
 
   const isDashboard = window.location.pathname.includes("/dashboard/");
-  const user = JSON.parse(localStorage.getItem("user"));
 
   let file = "/footer.html";
 
   if (isDashboard) {
-    file = "/dashboard/footer.html";
-  } else if (user) {
     file = "/dashboard/footer.html";
   }
 
@@ -387,9 +382,7 @@ function initLogout() {
   if (!logoutBtn) return;
 
   logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    window.location.href = "/index.html";
+    localStorage.clear();
+    window.location.replace("/index.html");
   });
 }
