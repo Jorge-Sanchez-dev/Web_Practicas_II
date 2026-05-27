@@ -140,17 +140,8 @@ function initAuthModal() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name,
             email,
             password,
-            confirmPassword,
-            edad,
-            sexo,
-            altura,
-            pesoActual,
-            pesoObjetivo,
-            nivelActividad,
-            objetivo,
           }),
         });
 
@@ -175,18 +166,18 @@ function initAuthModal() {
   // REGISTRO
 
   const registerData = {
-  name: document.getElementById("registerName").value,
-  email: document.getElementById("registerEmail").value,
-  password: document.getElementById("registerPassword").value,
-  confirmPassword: document.getElementById("confirmPassword").value,
-  edad: document.getElementById("registerEdad").value,
-  sexo: document.getElementById("registerSexo").value,
-  altura: document.getElementById("registerAltura").value,
-  pesoActual: document.getElementById("registerPesoActual").value,
-  pesoObjetivo: document.getElementById("registerPesoObjetivo").value,
-  nivelActividad: document.getElementById("registerNivelActividad").value,
-  objetivo: document.getElementById("registerObjetivo").value,
-};
+    name,
+    email,
+    password,
+    confirmPassword,
+    edad: document.getElementById("registerEdad").value,
+    sexo: document.getElementById("registerSexo").value,
+    altura: document.getElementById("registerAltura").value,
+    pesoActual: document.getElementById("registerPesoActual").value,
+    pesoObjetivo: document.getElementById("registerPesoObjetivo").value,
+    nivelActividad: document.getElementById("registerNivelActividad").value,
+    objetivo: document.getElementById("registerObjetivo").value,
+  };
 
   const registerForm = document.getElementById("registerForm");
 

@@ -25,7 +25,6 @@ mongoose
   .catch((error) => console.error("Error conectando MongoDB:", error));
 
 // REGISTRO
-// REGISTRO
 app.post("/api/auth/register", async (req, res) => {
   try {
     const {
@@ -40,6 +39,7 @@ app.post("/api/auth/register", async (req, res) => {
       pesoObjetivo,
       nivelActividad,
       objetivo,
+      fotoPerfil,
     } = req.body;
 
     if (
@@ -107,8 +107,8 @@ app.post("/api/auth/register", async (req, res) => {
       nivelActividad,
       objetivo,
 
-      fotoPerfil: "",
-      historialPeso: [],
+      fotoPerfil: fotoPerfil || "",
+      historialPeso: [Number(pesoActual)],
     });
 
     const token = jwt.sign(
@@ -117,7 +117,7 @@ app.post("/api/auth/register", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     return res.status(201).json({
@@ -179,7 +179,7 @@ app.post("/api/auth/login", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     return res.json({
@@ -209,7 +209,7 @@ app.get("/api/recipes", async (req, res) => {
 
     if (query) {
       url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
-        String(query)
+        String(query),
       )}&number=${number}&apiKey=${API_KEY}`;
     } else {
       url = `https://api.spoonacular.com/recipes/random?number=${number}&apiKey=${API_KEY}`;
