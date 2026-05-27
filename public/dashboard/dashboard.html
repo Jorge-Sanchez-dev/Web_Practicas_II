@@ -16,7 +16,7 @@
             <div class="dashboard-welcome">
               <span class="dashboard-kicker">Tu espacio personal</span>
               <h1 class="dashboard-title">
-                Hola, Jorge. ¿Qué cocinamos esta semana?
+                Hola, <span id="dashboardUserName">usuario</span>. ¿Qué cocinamos esta semana?
               </h1>
               <p class="dashboard-text">
                 Desde aquí puedes revisar tu menú semanal, consultar tu lista de
@@ -41,7 +41,7 @@
               </div>
 
               <div class="summary-item">
-                <span class="summary-label">Comidas planificadas</span>
+                <span class="summary-label">Comidas planificadas de la semana</span>
                 <span class="summary-value">5</span>
                 <p class="summary-sub">Semana casi bajo control. Casi.</p>
               </div>
@@ -262,21 +262,6 @@
 
     <!-- FOOTER -->
     <div id="footer"></div>
-
-    
-    <script>
-      async function loadComponent(id, file) {
-        const el = document.getElementById(id);
-        if (!el) return;
-
-        const res = await fetch(file);
-        const html = await res.text();
-        el.innerHTML = html;
-      }
-
-      loadComponent("header", "./dashboard/header.html");
-      loadComponent("footer", "./dashboard/footer.html");
-    </script>
 
     <script type="module" src="../script.js"></script>
   </body>

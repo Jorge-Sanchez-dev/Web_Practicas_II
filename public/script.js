@@ -3,6 +3,8 @@ function initAuthModal() {
   const loginModal = document.getElementById("loginModal");
   const registerModal = document.getElementById("registerModal");
 
+  if (!authModal && !loginModal && !registerModal) return;
+
   const openButtons = document.querySelectorAll(".open-auth-modal");
   const closeMainBtn = document.getElementById("closeAuthModal");
 
@@ -11,20 +13,6 @@ function initAuthModal() {
 
   const switchToRegister = document.getElementById("switchToRegister");
   const switchToLogin = document.getElementById("switchToLogin");
-
-  const edad = Number(document.getElementById("registerEdad").value);
-  const sexo = document.getElementById("registerSexo").value;
-  const altura = Number(document.getElementById("registerAltura").value);
-  const pesoActual = Number(
-    document.getElementById("registerPesoActual").value,
-  );
-  const pesoObjetivo = Number(
-    document.getElementById("registerPesoObjetivo").value,
-  );
-  const nivelActividad = document.getElementById(
-    "registerNivelActividad",
-  ).value;
-  const objetivo = document.getElementById("registerObjetivo").value;
 
   function openModal(modal) {
     if (!modal) return;
@@ -330,6 +318,7 @@ async function initLayout() {
   initAuthModal();
   initRecipeSearch();
   initLogout();
+  initDashboardUserName();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -385,4 +374,15 @@ function initLogout() {
     localStorage.clear();
     window.location.replace("/index.html");
   });
+}
+
+function initDashboardUserName() {
+  const nameElement = document.getElementById("dashboardUserName");
+  if (!nameElement) return;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user && user.name) {
+    nameElement.textContent = user.name;
+  }
 }
