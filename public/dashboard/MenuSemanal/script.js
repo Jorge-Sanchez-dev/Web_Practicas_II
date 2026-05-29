@@ -6,15 +6,7 @@
 
   let currentDate = new Date();
 
-  const mealsData = {
-    0: { desayuno: "Tostadas con aguacate", comida: "Pasta con pollo", cena: "Ensalada César" },
-    1: { desayuno: "Yogur con frutas", comida: "Arroz con verduras", cena: "Tortilla francesa" },
-    2: { desayuno: "Avena con plátano", comida: "Lentejas", cena: "Salmón al horno" },
-    3: { desayuno: "Batido de frutas", comida: "Pollo con patatas", cena: "Crema de calabacín" },
-    4: { desayuno: "Tostadas y café", comida: "Paella", cena: "Wrap de pollo" },
-    5: { desayuno: "Pancakes", comida: "Hamburguesa casera", cena: "Pizza casera" },
-    6: { desayuno: "Croissant y zumo", comida: "Macarrones boloñesa", cena: "Sopa ligera" }
-  };
+  const mealsData = {};
 
   const dayNames = [
     "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"

@@ -325,3 +325,84 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+
+import WeeklyMenu from "./models/WeeklyMenu";
+
+const authMiddleware = (req: any, res: any, next: any) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token no enviado" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded: any = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.id;
+    next();
+  } catch {
+    return res.status(401).json({ error: "Token inválido" });
+  }
+};
+
+// Obtener menú semanal
+app.get("/api/weekly-menu", authMiddleware, async (req: any, res) => {
+  try {
+    const { weekStart } = req.query;
+
+    const menu = await WeeklyMenu.findOne({
+      userId: req.userId,
+      weekStart: new Date(weekStart as string),
+    });
+
+    res.json(menu || { meals: [] });
+  } catch (error) {
+    res.status(500).json({ error: "Error obteniendo el menú semanal" });
+  }
+});
+
+// Guardar una receta en un hueco del menú
+app.post("/api/weekly-menu", authMiddleware, async (req: any, res) => {
+  try {
+    const { weekStart, day, mealType, recipeId, title, image } = req.body;
+
+    let menu = await WeeklyMenu.findOne({
+      userId: req.userId,
+      weekStart: new Date(weekStart),
+    });
+
+    if (!menu) {
+      menu = new WeeklyMenu({
+        userId: req.userId,
+        weekStart: new Date(weekStart),
+        meals: [],
+      });
+    }
+
+   const filteredMeals = menu.meals.filter(
+  (meal: any) => !(meal.day === day && meal.mealType === mealType)
+);
+
+menu.meals.splice(0, menu.meals.length);
+
+filteredMeals.forEach((meal: any) => {
+  menu.meals.push(meal);
+});
+
+    menu.meals.push({
+      day,
+      mealType,
+      recipeId,
+      title,
+      image,
+    });
+
+    await menu.save();
+
+    res.json(menu);
+  } catch (error) {
+    res.status(500).json({ error: "Error guardando el menú semanal" });
+  }
+});

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const menuDaySchema = new mongoose.Schema(
+const menuMealSchema = new mongoose.Schema(
   {
     day: {
       type: String,
@@ -14,6 +14,12 @@ const menuDaySchema = new mongoose.Schema(
         "sábado",
         "domingo",
       ],
+    },
+
+    mealType: {
+      type: String,
+      required: true,
+      enum: ["desayuno", "comida", "cena"],
     },
 
     recipeId: {
@@ -48,12 +54,14 @@ const weeklyMenuSchema = new mongoose.Schema(
       required: true,
     },
 
-    days: {
-      type: [menuDaySchema],
+    meals: {
+      type: [menuMealSchema],
       default: [],
     },
   },
   { timestamps: true }
 );
+
+weeklyMenuSchema.index({ userId: 1, weekStart: 1 }, { unique: true });
 
 export default mongoose.model("WeeklyMenu", weeklyMenuSchema);
