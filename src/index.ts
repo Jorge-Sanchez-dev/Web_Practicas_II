@@ -340,7 +340,7 @@ const authMiddleware = (req: any, res: any, next: any) => {
 
   try {
     const decoded: any = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.id;
+    req.userId = decoded.userId || decoded.id;
     next();
   } catch {
     return res.status(401).json({ error: "Token inválido" });
