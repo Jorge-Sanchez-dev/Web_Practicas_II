@@ -29,9 +29,7 @@
               id="recipeSearchInput"
               placeholder="Busca una receta, por ejemplo: pasta"
             />
-            <button id="recipeSearchBtn" class="btn btn-primary">
-              Buscar
-            </button>
+            <button id="recipeSearchBtn" class="btn btn-primary">Buscar</button>
           </div>
 
           <div id="recipesMessage" class="recipes-message"></div>
@@ -56,6 +54,37 @@
         });
     </script>
 
-    <script src="./recetas.js"></script>
+    <div id="menuModal" class="menu-modal">
+      <div class="menu-modal-content">
+        <button id="closeMenuModal" type="button">×</button>
+
+        <h3>Añadir receta al menú</h3>
+
+        <label for="menuDateInput">Fecha de la semana</label>
+        <input type="date" id="menuDateInput" />
+
+        <label for="menuDaySelect">Día</label>
+        <select id="menuDaySelect">
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miércoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+          <option value="sábado">Sábado</option>
+          <option value="domingo">Domingo</option>
+        </select>
+
+        <label for="menuMealSelect">Comida</label>
+        <select id="menuMealSelect">
+          <option value="desayuno">Desayuno</option>
+          <option value="comida">Comida</option>
+          <option value="cena">Cena</option>
+        </select>
+
+        <button id="saveMenuRecipeBtn" type="button">Guardar en menú</button>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
   </body>
 </html>

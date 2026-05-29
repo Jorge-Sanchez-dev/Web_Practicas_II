@@ -4,7 +4,9 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 import User from "./models/User";
+import WeeklyMenu from "./models/WeeklyMenu";
 
 dotenv.config();
 
@@ -23,6 +25,25 @@ mongoose
   .connect(MONGODB_URI as string)
   .then(() => console.log("MongoDB conectado correctamente"))
   .catch((error) => console.error("Error conectando MongoDB:", error));
+
+// MIDDLEWARE AUTH
+const authMiddleware = (req: any, res: any, next: any) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token no enviado" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded: any = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId || decoded.id;
+    next();
+  } catch {
+    return res.status(401).json({ error: "Token inválido" });
+  }
+};
 
 // REGISTRO
 app.post("/api/auth/register", async (req, res) => {
@@ -98,7 +119,6 @@ app.post("/api/auth/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
-
       edad: Number(edad),
       sexo,
       altura: Number(altura),
@@ -106,11 +126,10 @@ app.post("/api/auth/register", async (req, res) => {
       pesoObjetivo: Number(pesoObjetivo),
       nivelActividad,
       objetivo,
-
       fotoPerfil: fotoPerfil || "",
       historialPeso: [
         {
-          peso: pesoActual,
+          peso: Number(pesoActual),
           fecha: new Date(),
         },
       ],
@@ -122,7 +141,7 @@ app.post("/api/auth/register", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" },
+      { expiresIn: "7d" }
     );
 
     return res.status(201).json({
@@ -184,7 +203,7 @@ app.post("/api/auth/login", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" },
+      { expiresIn: "7d" }
     );
 
     return res.json({
@@ -204,22 +223,10 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.get("/api/auth/me", async (req, res) => {
+// USUARIO ACTUAL
+app.get("/api/auth/me", authMiddleware, async (req: any, res) => {
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-      return res.status(401).json({ error: "No autorizado" });
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    const decoded = jwt.verify(token, JWT_SECRET) as {
-      userId: string;
-      email: string;
-    };
-
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(req.userId).select("-password");
 
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
@@ -241,7 +248,7 @@ app.get("/api/recipes", async (req, res) => {
 
     if (query) {
       url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
-        String(query),
+        String(query)
       )}&number=${number}&apiKey=${API_KEY}`;
     } else {
       url = `https://api.spoonacular.com/recipes/random?number=${number}&apiKey=${API_KEY}`;
@@ -317,56 +324,49 @@ app.get("/api/recipes/:id", async (req, res) => {
   }
 });
 
-// RUTA FINAL PARA HTML
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
-
-
-import WeeklyMenu from "./models/WeeklyMenu";
-
-const authMiddleware = (req: any, res: any, next: any) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ error: "Token no enviado" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.userId || decoded.id;
-    next();
-  } catch {
-    return res.status(401).json({ error: "Token inválido" });
-  }
-};
-
-// Obtener menú semanal
+// OBTENER MENÚ SEMANAL
 app.get("/api/weekly-menu", authMiddleware, async (req: any, res) => {
   try {
     const { weekStart } = req.query;
+
+    if (!weekStart) {
+      return res.status(400).json({ error: "Falta weekStart" });
+    }
 
     const menu = await WeeklyMenu.findOne({
       userId: req.userId,
       weekStart: new Date(weekStart as string),
     });
 
-    res.json(menu || { meals: [] });
+    return res.json({
+      meals: menu ? menu.meals : [],
+    });
   } catch (error) {
-    res.status(500).json({ error: "Error obteniendo el menú semanal" });
+    console.error("Error obteniendo el menú semanal:", error);
+    return res.status(500).json({
+      error: "Error obteniendo el menú semanal",
+    });
   }
 });
 
-// Guardar una receta en un hueco del menú
+// GUARDAR RECETA EN MENÚ SEMANAL
 app.post("/api/weekly-menu", authMiddleware, async (req: any, res) => {
   try {
     const { weekStart, day, mealType, recipeId, title, image } = req.body;
+
+    if (!weekStart || !day || !mealType || !recipeId || !title) {
+      return res.status(400).json({
+        error: "Faltan datos para guardar la receta en el menú",
+      });
+    }
+
+    const newMeal = {
+      day,
+      mealType,
+      recipeId,
+      title,
+      image: image || "",
+    };
 
     let menu = await WeeklyMenu.findOne({
       userId: req.userId,
@@ -374,35 +374,55 @@ app.post("/api/weekly-menu", authMiddleware, async (req: any, res) => {
     });
 
     if (!menu) {
-      menu = new WeeklyMenu({
+      menu = await WeeklyMenu.create({
         userId: req.userId,
         weekStart: new Date(weekStart),
-        meals: [],
+        meals: [newMeal],
       });
+
+      return res.status(201).json(menu);
     }
 
-   const filteredMeals = menu.meals.filter(
-  (meal: any) => !(meal.day === day && meal.mealType === mealType)
-);
+    const index = menu.meals.findIndex(
+      (meal: any) => meal.day === day && meal.mealType === mealType
+    );
 
-menu.meals.splice(0, menu.meals.length);
+    const replace = req.body.replace === true;
 
-filteredMeals.forEach((meal: any) => {
-  menu.meals.push(meal);
-});
+if (index !== -1 && !replace) {
+  return res.status(409).json({
+    error: "Ya existe una receta en ese hueco del menú",
+    message: "¿Quieres reemplazar la receta existente?",
+    existingMeal: menu.meals[index],
+  });
+}
 
-    menu.meals.push({
-      day,
-      mealType,
-      recipeId,
-      title,
-      image,
-    });
+if (index !== -1 && replace) {
+  menu.meals[index].day = day;
+  menu.meals[index].mealType = mealType;
+  menu.meals[index].recipeId = recipeId;
+  menu.meals[index].title = title;
+  menu.meals[index].image = image || "";
+} else {
+  menu.meals.push(newMeal as any);
+}
 
     await menu.save();
 
-    res.json(menu);
+    return res.json(menu);
   } catch (error) {
-    res.status(500).json({ error: "Error guardando el menú semanal" });
+    console.error("Error guardando el menú semanal:", error);
+    return res.status(500).json({
+      error: "Error guardando el menú semanal",
+    });
   }
+});
+
+// RUTA FINAL PARA HTML
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

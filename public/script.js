@@ -362,6 +362,12 @@ function initAddToMenu() {
       image: btn.dataset.image,
     };
 
+    const dateInput = document.getElementById("menuDateInput");
+
+    if (dateInput) {
+      dateInput.value = formatDateForAPI(new Date());
+    }
+
     modal.classList.add("active");
   });
 
@@ -388,7 +394,17 @@ function initAddToMenu() {
       return;
     }
 
-    const weekStart = formatDateForAPI(getStartOfCurrentWeek(new Date()));
+    const dateInput = document.getElementById("menuDateInput");
+    const selectedDate = dateInput?.value;
+
+    if (!selectedDate) {
+      alert("Selecciona una fecha");
+      return;
+    }
+
+    const weekStart = formatDateForAPI(
+      getStartOfCurrentWeek(new Date(selectedDate))
+    );
 
     const body = {
       weekStart,
@@ -407,8 +423,39 @@ function initAddToMenu() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
+      if (response.status === 409) {
+        const confirmed = confirm(
+          `Ya tienes "${data.existingMeal.title}" en ese hueco.\n\n¿Quieres reemplazarla?`
+        );
+
+        if (!confirmed) return;
+
+        const replaceResponse = await fetch("/api/weekly-menu", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...body,
+            replace: true,
+          }),
+        });
+
+        if (!replaceResponse.ok) {
+          alert("No se pudo reemplazar la receta");
+          return;
+        }
+
+        alert("Receta reemplazada correctamente");
+        modal.classList.remove("active");
+        return;
+      }
+
       if (!response.ok) {
-        alert("No se pudo añadir la receta");
+        alert(data.error || "No se pudo añadir la receta");
         return;
       }
 
