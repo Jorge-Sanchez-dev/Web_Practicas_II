@@ -226,14 +226,15 @@ function createRecipeCard(recipe, showAddButton = false) {
             showAddButton
               ? `
               <button
-                type="button"
-                class="add-to-menu-btn"
-                data-id="${recipe.id}"
-                data-title="${recipe.title}"
-                data-image="${recipe.image}"
-              >
-                Añadir
-              </button>
+  type="button"
+  class="add-to-menu-btn"
+  onclick="openMenuModalFromButton(this)"
+  data-id="${recipe.id}"
+  data-title="${recipe.title}"
+  data-image="${recipe.image}"
+>
+  Añadir
+</button>
             `
               : ""
           }
@@ -345,31 +346,34 @@ function formatDateForAPI(date) {
   return date.toISOString().split("T")[0];
 }
 
+function openMenuModalFromButton(btn) {
+  const modal = document.getElementById("menuModal");
+
+  selectedRecipe = {
+    recipeId: Number(btn.dataset.id),
+    title: btn.dataset.title,
+    image: btn.dataset.image,
+  };
+
+  const dateInput = document.getElementById("menuDateInput");
+
+  if (dateInput) {
+    dateInput.value = formatDateForAPI(new Date());
+  }
+
+  modal.classList.add("active");
+}
+
 function initAddToMenu() {
   const modal = document.getElementById("menuModal");
   const closeBtn = document.getElementById("closeMenuModal");
   const saveBtn = document.getElementById("saveMenuRecipeBtn");
+  const recipesContainer = document.getElementById("recipesContainer");
 
-  if (!modal || !saveBtn) return;
-
-  document.addEventListener("click", (event) => {
-    const btn = event.target.closest(".add-to-menu-btn");
-    if (!btn) return;
-
-    selectedRecipe = {
-      recipeId: Number(btn.dataset.id),
-      title: btn.dataset.title,
-      image: btn.dataset.image,
-    };
-
-    const dateInput = document.getElementById("menuDateInput");
-
-    if (dateInput) {
-      dateInput.value = formatDateForAPI(new Date());
-    }
-
-    modal.classList.add("active");
-  });
+  if (!modal || !saveBtn || !recipesContainer) {
+    console.error("Falta modal, botón guardar o contenedor de recetas");
+    return;
+  }
 
   closeBtn?.addEventListener("click", () => {
     modal.classList.remove("active");
@@ -394,8 +398,7 @@ function initAddToMenu() {
       return;
     }
 
-    const dateInput = document.getElementById("menuDateInput");
-    const selectedDate = dateInput?.value;
+    const selectedDate = document.getElementById("menuDateInput").value;
 
     if (!selectedDate) {
       alert("Selecciona una fecha");
@@ -403,7 +406,7 @@ function initAddToMenu() {
     }
 
     const weekStart = formatDateForAPI(
-      getStartOfCurrentWeek(new Date(selectedDate))
+      getStartOfCurrentWeek(new Date(selectedDate)),
     );
 
     const body = {
@@ -424,35 +427,6 @@ function initAddToMenu() {
       });
 
       const data = await response.json();
-
-      if (response.status === 409) {
-        const confirmed = confirm(
-          `Ya tienes "${data.existingMeal.title}" en ese hueco.\n\n¿Quieres reemplazarla?`
-        );
-
-        if (!confirmed) return;
-
-        const replaceResponse = await fetch("/api/weekly-menu", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ...body,
-            replace: true,
-          }),
-        });
-
-        if (!replaceResponse.ok) {
-          alert("No se pudo reemplazar la receta");
-          return;
-        }
-
-        alert("Receta reemplazada correctamente");
-        modal.classList.remove("active");
-        return;
-      }
 
       if (!response.ok) {
         alert(data.error || "No se pudo añadir la receta");

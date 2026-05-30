@@ -1032,7 +1032,7 @@ html {
   }
 }
 
-.menu-modal-overlay {
+.menu-modal {
   display: none;
   position: fixed;
   inset: 0;
@@ -1042,11 +1042,11 @@ html {
   z-index: 9999;
 }
 
-.menu-modal-overlay.active {
+.menu-modal.active {
   display: flex;
 }
 
-.menu-modal {
+.menu-modal-content {
   background: white;
   width: 100%;
   max-width: 420px;
@@ -1055,24 +1055,37 @@ html {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
 }
 
-.menu-modal label {
+.menu-modal-content label {
   display: block;
   margin-top: 1rem;
   margin-bottom: 0.4rem;
   font-weight: 700;
 }
 
-.menu-modal select {
+.menu-modal-content input,
+.menu-modal-content select {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #e7e5e4;
   border-radius: 10px;
 }
 
-.menu-modal-close {
+#closeMenuModal {
   float: right;
   border: none;
   background: transparent;
   font-size: 1.8rem;
+  cursor: pointer;
+}
+
+#saveMenuRecipeBtn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  background: #1f2937;
+  color: white;
+  font-weight: 700;
   cursor: pointer;
 }
