@@ -225,16 +225,26 @@ function createRecipeCard(recipe, showAddButton = false) {
           ${
             showAddButton
               ? `
-              <button
-  type="button"
-  class="add-to-menu-btn"
-  data-id="${recipe.id}"
-  data-title="${recipe.title}"
-  data-image="${recipe.image}"
->
-  Añadir
-</button>
-            `
+                <button
+                  type="button"
+                  class="save-recipe-btn"
+                  data-id="${recipe.id}"
+                  data-title="${recipe.title}"
+                  data-image="${recipe.image}"
+                >
+                  Guardar
+                </button>
+
+                <button
+                  type="button"
+                  class="add-to-menu-btn"
+                  data-id="${recipe.id}"
+                  data-title="${recipe.title}"
+                  data-image="${recipe.image}"
+                >
+                  Añadir
+                </button>
+              `
               : ""
           }
 
@@ -534,6 +544,54 @@ function initAddToMenu() {
   });
 }
 
+function initSaveRecipe() {
+  document.addEventListener("click", async (event) => {
+    const btn = event.target.closest(".save-recipe-btn");
+    if (!btn) return;
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Debes iniciar sesión para guardar recetas");
+      return;
+    }
+
+    const body = {
+      recipeId: Number(btn.dataset.id),
+      title: btn.dataset.title,
+      image: btn.dataset.image,
+    };
+
+    try {
+      const response = await fetch("/api/saved-recipes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 409) {
+        alert("Esta receta ya está guardada");
+        return;
+      }
+
+      if (!response.ok) {
+        alert(data.error || "No se pudo guardar la receta");
+        return;
+      }
+
+      alert("Receta guardada correctamente ✅");
+    } catch (error) {
+      console.error(error);
+      alert("Error guardando la receta");
+    }
+  });
+}
+
 async function initLayout() {
   await loadHeader();
   await loadFooter();
@@ -555,6 +613,7 @@ async function initLayout() {
   initLogout();
   initDashboardUserName();
   initAddToMenu();
+  initSaveRecipe();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import ShoppingList from "./models/ShoppingList";
+import SavedRecipe from "./models/SavedRecipe";
 
 import User from "./models/User";
 import WeeklyMenu from "./models/WeeklyMenu";
@@ -415,6 +417,116 @@ if (index !== -1 && replace) {
     return res.status(500).json({
       error: "Error guardando el menú semanal",
     });
+  }
+});
+
+// OBTENER LISTA DE LA COMPRA DE LA SEMANA ACTUAL
+app.get("/api/shopping-list", authMiddleware, async (req: any, res) => {
+  try {
+    const { weekStart } = req.query;
+
+    if (!weekStart) {
+      return res.status(400).json({ error: "Falta weekStart" });
+    }
+
+    const menu = await WeeklyMenu.findOne({
+      userId: req.userId,
+      weekStart: new Date(weekStart as string),
+    });
+
+    if (!menu || menu.meals.length === 0) {
+      return res.json({ items: [] });
+    }
+
+    const ingredientSet = new Set<string>();
+
+    for (const meal of menu.meals) {
+      const url = `https://api.spoonacular.com/recipes/${meal.recipeId}/information?apiKey=${API_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const ingredients =
+        data.extendedIngredients?.map((ing: any) => ing.original) || [];
+
+      ingredients.forEach((ingredient: string) => {
+        ingredientSet.add(ingredient);
+      });
+    }
+
+    const items = Array.from(ingredientSet).map((ingredient) => ({
+      name: ingredient,
+      quantity: "",
+      checked: false,
+    }));
+
+    return res.json({ items });
+  } catch (error) {
+    console.error("Error generando lista de la compra:", error);
+    return res.status(500).json({
+      error: "Error generando lista de la compra",
+    });
+  }
+});
+
+// GUARDAR RECETA
+app.post("/api/saved-recipes", authMiddleware, async (req: any, res) => {
+  try {
+    const { recipeId, title, image } = req.body;
+
+    if (!recipeId || !title) {
+      return res.status(400).json({ error: "Faltan datos de la receta" });
+    }
+
+    const existingRecipe = await SavedRecipe.findOne({
+      userId: req.userId,
+      recipeId,
+    });
+
+    if (existingRecipe) {
+      return res.status(409).json({ error: "La receta ya está guardada" });
+    }
+
+    const savedRecipe = await SavedRecipe.create({
+      userId: req.userId,
+      recipeId,
+      title,
+      image: image || "",
+    });
+
+    return res.status(201).json(savedRecipe);
+  } catch (error) {
+    console.error("Error guardando receta:", error);
+    return res.status(500).json({ error: "Error guardando receta" });
+  }
+});
+
+// OBTENER RECETAS GUARDADAS
+app.get("/api/saved-recipes", authMiddleware, async (req: any, res) => {
+  try {
+    const recipes = await SavedRecipe.find({
+      userId: req.userId,
+    }).sort({ createdAt: -1 });
+
+    return res.json({ recipes });
+  } catch (error) {
+    console.error("Error obteniendo recetas guardadas:", error);
+    return res.status(500).json({ error: "Error obteniendo recetas guardadas" });
+  }
+});
+
+// ELIMINAR RECETA GUARDADA
+app.delete("/api/saved-recipes/:recipeId", authMiddleware, async (req: any, res) => {
+  try {
+    await SavedRecipe.findOneAndDelete({
+      userId: req.userId,
+      recipeId: Number(req.params.recipeId),
+    });
+
+    return res.json({ message: "Receta eliminada correctamente" });
+  } catch (error) {
+    console.error("Error eliminando receta:", error);
+    return res.status(500).json({ error: "Error eliminando receta" });
   }
 });
 
