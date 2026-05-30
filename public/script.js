@@ -341,6 +341,39 @@ function getStartOfCurrentWeek(date) {
   return d;
 }
 
+function generateWeekOptions() {
+  const select = document.getElementById("menuWeekSelect");
+
+  if (!select) return;
+
+  select.innerHTML = "";
+
+  const months = [
+    "ene","feb","mar","abr","may","jun",
+    "jul","ago","sep","oct","nov","dic"
+  ];
+
+  for (let i = 0; i < 8; i++) {
+    const start = getStartOfCurrentWeek(new Date());
+
+    start.setDate(start.getDate() + i * 7);
+
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+
+    const label =
+      `${start.getDate()} ${months[start.getMonth()]} - ` +
+      `${end.getDate()} ${months[end.getMonth()]}`;
+
+    const option = document.createElement("option");
+
+    option.value = formatDateForAPI(start);
+    option.textContent = label;
+
+    select.appendChild(option);
+  }
+}
+
 function formatDateForAPI(date) {
   return date.toISOString().split("T")[0];
 }
@@ -363,35 +396,52 @@ function openMenuModalFromButton(btn) {
   modal.classList.add("active");
 }
 
+function showMenuMessage(text) {
+  const modalContent = document.querySelector(".menu-modal-content");
+
+  let message = document.getElementById("menuSuccessMessage");
+
+  if (!message) {
+    message = document.createElement("div");
+    message.id = "menuSuccessMessage";
+    message.className = "menu-success-message";
+    modalContent.appendChild(message);
+  }
+
+  message.textContent = text;
+  message.classList.add("active");
+
+  setTimeout(() => {
+    message.classList.remove("active");
+    document.getElementById("menuModal").classList.remove("active");
+  }, 1400);
+}
+
 function initAddToMenu() {
   const modal = document.getElementById("menuModal");
   const closeBtn = document.getElementById("closeMenuModal");
   const saveBtn = document.getElementById("saveMenuRecipeBtn");
   const recipesContainer = document.getElementById("recipesContainer");
 
-  document.addEventListener("click", (event) => {
-  const btn = event.target.closest(".add-to-menu-btn");
-  if (!btn) return;
-
-  selectedRecipe = {
-    recipeId: Number(btn.dataset.id),
-    title: btn.dataset.title,
-    image: btn.dataset.image,
-  };
-
-  const dateInput = document.getElementById("menuDateInput");
-
-  if (dateInput) {
-    dateInput.value = formatDateForAPI(new Date());
-  }
-
-  modal.classList.add("active");
-});
-
   if (!modal || !saveBtn || !recipesContainer) {
     console.error("Falta modal, botón guardar o contenedor de recetas");
     return;
   }
+
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest(".add-to-menu-btn");
+    if (!btn) return;
+
+    selectedRecipe = {
+      recipeId: Number(btn.dataset.id),
+      title: btn.dataset.title,
+      image: btn.dataset.image,
+    };
+
+    generateWeekOptions();
+
+    modal.classList.add("active");
+  });
 
   closeBtn?.addEventListener("click", () => {
     modal.classList.remove("active");
@@ -416,16 +466,13 @@ function initAddToMenu() {
       return;
     }
 
-    const selectedDate = document.getElementById("menuDateInput").value;
+    const weekSelect = document.getElementById("menuWeekSelect");
+    const weekStart = weekSelect.value;
 
-    if (!selectedDate) {
-      alert("Selecciona una fecha");
+    if (!weekStart) {
+      alert("Selecciona una semana");
       return;
     }
-
-    const weekStart = formatDateForAPI(
-      getStartOfCurrentWeek(new Date(selectedDate)),
-    );
 
     const body = {
       weekStart,
@@ -446,13 +493,40 @@ function initAddToMenu() {
 
       const data = await response.json();
 
+      if (response.status === 409) {
+        const confirmed = confirm(
+          `Ya tienes "${data.existingMeal.title}" en ese hueco.\n\n¿Quieres reemplazarla?`
+        );
+
+        if (!confirmed) return;
+
+        const replaceResponse = await fetch("/api/weekly-menu", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...body,
+            replace: true,
+          }),
+        });
+
+        if (!replaceResponse.ok) {
+          alert("No se pudo reemplazar la receta");
+          return;
+        }
+
+        showMenuMessage("Receta reemplazada correctamente ✅");
+        return;
+      }
+
       if (!response.ok) {
         alert(data.error || "No se pudo añadir la receta");
         return;
       }
 
-      alert("Receta añadida al menú semanal");
-      modal.classList.remove("active");
+      showMenuMessage("Receta añadida al menú semanal ✅");
     } catch (error) {
       console.error(error);
       alert("Error al guardar la receta en el menú");

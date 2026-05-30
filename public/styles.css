@@ -1392,3 +1392,18 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+.menu-success-message {
+  display: none;
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border-radius: 10px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  text-align: center;
+}
+
+.menu-success-message.active {
+  display: block;
+}

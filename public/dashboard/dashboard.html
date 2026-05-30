@@ -58,60 +58,11 @@
         <div class="container">
           <div class="dashboard-grid">
             <div class="dashboard-col">
-              <section class="dashboard-panel" id="menu">
-                <div class="panel-head">
-                  <h2 class="panel-title">Menú de esta semana</h2>
-                  <a href="./MenuSemanal/menuSemanal.html" class="panel-link">Editar menú</a>
-                </div>
-
-                <div class="menu-days">
-                  <article class="menu-day">
-                    <div>
-                      <strong>Lunes</strong>
-                      <span>Pasta cremosa con pollo y espinacas</span>
-                    </div>
-                    <span class="menu-badge">Preparación 25 min</span>
-                  </article>
-
-                  <article class="menu-day">
-                    <div>
-                      <strong>Martes</strong>
-                      <span>Salmón al horno con verduras</span>
-                    </div>
-                    <span class="menu-badge">Cena saludable</span>
-                  </article>
-
-                  <article class="menu-day">
-                    <div>
-                      <strong>Miércoles</strong>
-                      <span>Tacos de pollo con guacamole</span>
-                    </div>
-                    <span class="menu-badge">Fácil y rápido</span>
-                  </article>
-
-                  <article class="menu-day">
-                    <div>
-                      <strong>Jueves</strong>
-                      <span>Crema de calabaza y tostadas integrales</span>
-                    </div>
-                    <span class="menu-badge">Ligero</span>
-                  </article>
-
-                  <article class="menu-day">
-                    <div>
-                      <strong>Viernes</strong>
-                      <span>Pizza casera de verduras</span>
-                    </div>
-                    <span class="menu-badge">Plan finde activado</span>
-                  </article>
-                </div>
-
-                <div class="dashboard-note">Aqui poner un consejo</div>
-              </section>
+                    
 
               <section class="dashboard-card">
                 <div class="panel-head">
-                  <h2 class="panel-title">Recomendaciones</h2>
+                  <h2 class="panel-title">Recomendaciones (cosas que se pueden hacer) </h2>
                 </div>
 
                 <div class="quick-actions">
@@ -134,41 +85,29 @@
                     <span class="quick-action-title">Repetir semana anterior</span>
                     <span class="quick-action-text">Ahorra tiempo planificando.</span>
                   </a>
+                  <a href="#" class="quick-action">
+                    <span class="quick-action-title">Generar lista de la compra</span>
+                    <span class="quick-action-text">Organiza ingredientes.</span>
+                  </a>
+
+                  <a href="#" class="quick-action">
+                    <span class="quick-action-title">Repetir semana anterior</span>
+                    <span class="quick-action-text">Ahorra tiempo planificando.</span>
+                  </a>
+                  <a href="#" class="quick-action">
+                    <span class="quick-action-title">Generar lista de la compra</span>
+                    <span class="quick-action-text">Organiza ingredientes.</span>
+                  </a>
+
+                  <a href="#" class="quick-action">
+                    <span class="quick-action-title">Repetir semana anterior</span>
+                    <span class="quick-action-text">Ahorra tiempo planificando.</span>
+                  </a>
                 </div>
               </section>
             </div>
 
             <div class="dashboard-col">
-              <section class="dashboard-panel" id="shopping">
-                <div class="panel-head">
-                  <h2 class="panel-title">Lista de la compra</h2>
-                  <a href="#" class="panel-link">Ver completa</a>
-                </div>
-
-                <div class="shopping-list">
-                  <div class="shopping-item">
-                    <span>Pechuga de pollo</span>
-                    <small>600 g</small>
-                  </div>
-                  <div class="shopping-item">
-                    <span>Espinacas frescas</span>
-                    <small>1 bolsa</small>
-                  </div>
-                  <div class="shopping-item">
-                    <span>Tortillas de trigo</span>
-                    <small>1 paquete</small>
-                  </div>
-                  <div class="shopping-item">
-                    <span>Calabaza</span>
-                    <small>1 unidad</small>
-                  </div>
-                  <div class="shopping-item">
-                    <span>Queso mozzarella</span>
-                    <small>2 paquetes</small>
-                  </div>
-                </div>
-              </section>
-
               <section class="dashboard-panel" id="saved">
                 <div class="panel-head">
                   <h2 class="panel-title">Recetas guardadas</h2>
@@ -252,8 +191,8 @@
 
         <h3>Añadir receta al menú</h3>
 
-        <label for="menuDateInput">Fecha de la semana</label>
-        <input type="date" id="menuDateInput" />
+        <label for="menuWeekSelect">Semana</label>
+<select id="menuWeekSelect"></select>
 
         <label for="menuDaySelect">Día</label>
         <select id="menuDaySelect">
