@@ -228,7 +228,6 @@ function createRecipeCard(recipe, showAddButton = false) {
               <button
   type="button"
   class="add-to-menu-btn"
-  onclick="openMenuModalFromButton(this)"
   data-id="${recipe.id}"
   data-title="${recipe.title}"
   data-image="${recipe.image}"
@@ -369,6 +368,25 @@ function initAddToMenu() {
   const closeBtn = document.getElementById("closeMenuModal");
   const saveBtn = document.getElementById("saveMenuRecipeBtn");
   const recipesContainer = document.getElementById("recipesContainer");
+
+  document.addEventListener("click", (event) => {
+  const btn = event.target.closest(".add-to-menu-btn");
+  if (!btn) return;
+
+  selectedRecipe = {
+    recipeId: Number(btn.dataset.id),
+    title: btn.dataset.title,
+    image: btn.dataset.image,
+  };
+
+  const dateInput = document.getElementById("menuDateInput");
+
+  if (dateInput) {
+    dateInput.value = formatDateForAPI(new Date());
+  }
+
+  modal.classList.add("active");
+});
 
   if (!modal || !saveBtn || !recipesContainer) {
     console.error("Falta modal, botón guardar o contenedor de recetas");
