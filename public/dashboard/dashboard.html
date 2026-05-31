@@ -26,27 +26,40 @@
               </p>
 
               <div class="dashboard-actions">
-                <a href="#menu" class="btn btn-primary">Ver menú semanal</a>
-                <a href="#shopping" class="btn btn-outline-light">Ir a la compra</a>
+                <a
+                  href="/dashboard/MenuSemanal/menuSemanal.html"
+                  class="btn btn-primary"
+                >
+                  Ver menú semanal
+                </a>
+
+                <a
+                  href="/dashboard/ListaCompra/listaCompra.html"
+                  class="btn btn-outline-light"
+                >
+                  Ir a la compra
+                </a>
               </div>
             </div>
 
             <aside class="dashboard-summary">
               <div class="summary-item">
                 <span class="summary-label">Recetas guardadas</span>
-                <span class="summary-value">12</span>
+                <span class="summary-value" id="savedRecipesCount">0</span>
                 <p class="summary-sub">Tus favoritas listas para reutilizar.</p>
               </div>
 
               <div class="summary-item">
-                <span class="summary-label">Comidas planificadas de la semana</span>
-                <span class="summary-value">5</span>
+                <span class="summary-label"
+                  >Comidas planificadas de la semana</span
+                >
+                <span class="summary-value" id="weeklyMealsCount">0 / 21</span>
                 <p class="summary-sub">Semana casi bajo control. Casi.</p>
               </div>
 
               <div class="summary-item">
                 <span class="summary-label">Productos en la lista</span>
-                <span class="summary-value">18</span>
+                <span class="summary-value" id="shoppingListCount">0</span>
                 <p class="summary-sub">El súper ya te empieza a conocer.</p>
               </div>
             </aside>
@@ -58,50 +71,82 @@
         <div class="container">
           <div class="dashboard-grid">
             <div class="dashboard-col">
-                    
-
               <section class="dashboard-card">
                 <div class="panel-head">
-                  <h2 class="panel-title">Recomendaciones (cosas que se pueden hacer) </h2>
+                  <h2 class="panel-title">Recomendaciones</h2>
                 </div>
 
                 <div class="quick-actions">
-                  <a href="#SeccionRecetas" class="quick-action">
-                    <span class="quick-action-title">Buscar nuevas recetas</span>
-                    <span class="quick-action-text">Encuentra ideas para tu menú.</span>
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Completa las 21 comidas de la semana</span
+                    >
+                    <span class="quick-action-text"
+                      >Organiza desayunos, comidas y cenas.</span
+                    >
                   </a>
 
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Añadir receta propia</span>
-                    <span class="quick-action-text">Guarda tus platos favoritos.</span>
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Revisa tu lista de la compra</span
+                    >
+                    <span class="quick-action-text"
+                      >Comprueba que no falta ningún ingrediente.</span
+                    >
                   </a>
 
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Generar lista de la compra</span>
-                    <span class="quick-action-text">Organiza ingredientes.</span>
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Guarda tus recetas favoritas</span
+                    >
+                    <span class="quick-action-text"
+                      >Ten siempre a mano tus platos preferidos.</span
+                    >
                   </a>
 
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Repetir semana anterior</span>
-                    <span class="quick-action-text">Ahorra tiempo planificando.</span>
-                  </a>
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Generar lista de la compra</span>
-                    <span class="quick-action-text">Organiza ingredientes.</span>
-                  </a>
-
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Repetir semana anterior</span>
-                    <span class="quick-action-text">Ahorra tiempo planificando.</span>
-                  </a>
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Generar lista de la compra</span>
-                    <span class="quick-action-text">Organiza ingredientes.</span>
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Prueba una receta nueva esta semana</span
+                    >
+                    <span class="quick-action-text"
+                      >Descubre sabores diferentes.</span
+                    >
                   </a>
 
-                  <a href="#" class="quick-action">
-                    <span class="quick-action-title">Repetir semana anterior</span>
-                    <span class="quick-action-text">Ahorra tiempo planificando.</span>
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Beber 2 litros de agua al día</span
+                    >
+                    <span class="quick-action-text"
+                      >La hidratación es fundamental.</span
+                    >
+                  </a>
+
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Caminar al menos 8.000 pasos</span
+                    >
+                    <span class="quick-action-text"
+                      >Complementa una buena alimentación.</span
+                    >
+                  </a>
+
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Actualiza tu peso actual</span
+                    >
+                    <span class="quick-action-text"
+                      >Mantén tu seguimiento al día.</span
+                    >
+                  </a>
+
+                  <a class="quick-action">
+                    <span class="quick-action-title"
+                      >Añade una fruta a tu desayuno</span
+                    >
+                    <span class="quick-action-text"
+                      >Un pequeño cambio que marca la diferencia.</span
+                    >
                   </a>
                 </div>
               </section>
@@ -114,43 +159,7 @@
                   <a href="#" class="panel-link">Ver todas</a>
                 </div>
 
-                <div class="saved-recipes">
-                  <article class="saved-recipe">
-                    <img
-                      src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=500&q=80"
-                      alt="Pasta cremosa"
-                    />
-                    <div>
-                      <h4>Pasta cremosa con pollo</h4>
-                      <p>Una receta rápida para los días con poco tiempo.</p>
-                      <a href="#">Ver receta</a>
-                    </div>
-                  </article>
-
-                  <article class="saved-recipe">
-                    <img
-                      src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80"
-                      alt="Ensalada saludable"
-                    />
-                    <div>
-                      <h4>Ensalada templada de quinoa</h4>
-                      <p>Ligera, completa y perfecta para la semana.</p>
-                      <a href="#">Ver receta</a>
-                    </div>
-                  </article>
-
-                  <article class="saved-recipe">
-                    <img
-                      src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80"
-                      alt="Pizza casera"
-                    />
-                    <div>
-                      <h4>Pizza casera de verduras</h4>
-                      <p>Porque una pizza hecha en casa siempre suma.</p>
-                      <a href="#">Ver receta</a>
-                    </div>
-                  </article>
-                </div>
+                <div id="dashboardSavedRecipes" class="saved-recipes"></div>
               </section>
             </div>
           </div>
@@ -192,7 +201,7 @@
         <h3>Añadir receta al menú</h3>
 
         <label for="menuWeekSelect">Semana</label>
-<select id="menuWeekSelect"></select>
+        <select id="menuWeekSelect"></select>
 
         <label for="menuDaySelect">Día</label>
         <select id="menuDaySelect">

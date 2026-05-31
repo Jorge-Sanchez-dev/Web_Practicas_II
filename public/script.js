@@ -592,6 +592,120 @@ function initSaveRecipe() {
   });
 }
 
+async function loadDashboardSavedRecipes() {
+  const token = localStorage.getItem("token");
+
+  if (!token) return;
+
+  const container = document.getElementById("dashboardSavedRecipes");
+
+  if (!container) return;
+
+  try {
+    const response = await fetch("/api/saved-recipes", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) return;
+
+    const recipes = data.recipes.slice(0, 3);
+
+    if (recipes.length === 0) {
+      container.innerHTML = `
+        <p class="empty-state">
+          Todavía no tienes recetas guardadas.
+        </p>
+      `;
+      return;
+    }
+
+    container.innerHTML = recipes
+  .map(
+    (recipe) => `
+      <article class="saved-recipe">
+        <img
+          src="${recipe.image}"
+          alt="${recipe.title}"
+        />
+
+        <div>
+          <h4>${recipe.title}</h4>
+
+          <p>Receta guardada en tu colección.</p>
+
+          <a
+            href="/dashboard/Receta/receta.html?id=${recipe.recipeId}"
+          >
+            Ver receta
+          </a>
+        </div>
+      </article>
+    `
+  )
+  .join("");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function loadDashboardSummary() {
+  const token = localStorage.getItem("token");
+
+  if (!token) return;
+
+  const savedRecipesCount = document.getElementById("savedRecipesCount");
+  const weeklyMealsCount = document.getElementById("weeklyMealsCount");
+  const shoppingItemsCount = document.getElementById("shoppingItemsCount");
+
+  if (!savedRecipesCount && !weeklyMealsCount && !shoppingItemsCount) return;
+
+  const weekStart = formatDateForAPI(getStartOfCurrentWeek(new Date()));
+
+  try {
+    const savedResponse = await fetch("/api/saved-recipes", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const savedData = await savedResponse.json();
+
+    if (savedResponse.ok && savedRecipesCount) {
+      savedRecipesCount.textContent = savedData.recipes.length;
+    }
+
+    const menuResponse = await fetch(`/api/weekly-menu?weekStart=${weekStart}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const menuData = await menuResponse.json();
+
+    if (menuResponse.ok && weeklyMealsCount) {
+      weeklyMealsCount.textContent = `${menuData.meals.length} / 21`;
+    }
+
+    const shoppingResponse = await fetch(`/api/shopping-list?weekStart=${weekStart}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const shoppingData = await shoppingResponse.json();
+
+    if (shoppingResponse.ok && shoppingItemsCount) {
+      shoppingItemsCount.textContent = shoppingData.items.length;
+    }
+  } catch (error) {
+    console.error("Error cargando resumen del dashboard:", error);
+  }
+}
+
 async function initLayout() {
   await loadHeader();
   await loadFooter();
@@ -614,6 +728,8 @@ async function initLayout() {
   initDashboardUserName();
   initAddToMenu();
   initSaveRecipe();
+  loadDashboardSummary();
+  loadDashboardSavedRecipes();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

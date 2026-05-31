@@ -993,6 +993,8 @@ html {
 }
 
 .recipe-card-link,
+.save-recipe-btn,
+.delete-saved-recipe-btn,
 .add-to-menu-btn {
   display: inline-block;
   padding: 10px 16px;
@@ -1088,4 +1090,63 @@ html {
   color: white;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* Recetas guardadas en dashboard */
+.saved-recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.saved-recipe {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #fffaf4;
+  border: 1px solid #f3dfc8;
+}
+
+.saved-recipe img {
+  width: 105px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.saved-recipe div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.saved-recipe h4 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #172033;
+}
+
+.saved-recipe p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.saved-recipe a {
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #d96b1c;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.saved-recipe a:hover {
+  background: #bd5813;
 }
