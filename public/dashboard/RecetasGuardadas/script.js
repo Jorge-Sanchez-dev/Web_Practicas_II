@@ -1,6 +1,26 @@
 const savedRecipesContainer = document.getElementById("savedRecipesContainer");
 const savedRecipesMessage = document.getElementById("savedRecipesMessage");
 
+function showToast(message) {
+  const toast = document.createElement("div");
+
+  toast.textContent = message;
+  toast.style.position = "fixed";
+  toast.style.top = "20px";
+  toast.style.right = "20px";
+  toast.style.background = "#e74c3c";
+  toast.style.color = "#fff";
+  toast.style.padding = "12px 18px";
+  toast.style.borderRadius = "8px";
+  toast.style.zIndex = "9999";
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
 async function loadSavedRecipes() {
   const token = localStorage.getItem("token");
 
@@ -86,14 +106,14 @@ document.addEventListener("click", async (event) => {
     });
 
     if (!response.ok) {
-      alert("No se pudo eliminar la receta");
+      showToast("No se pudo eliminar la receta");
       return;
     }
 
     loadSavedRecipes();
   } catch (error) {
     console.error(error);
-    alert("Error eliminando receta");
+    showToast("Error eliminando receta");
   }
 });
 

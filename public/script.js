@@ -1,3 +1,20 @@
+function showToast(message, type = "error") {
+  let toast = document.getElementById("toastMessage");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toastMessage";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.className = `toast-message ${type} show`;
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
 function initAuthModal() {
   const authModal = document.getElementById("authModal");
   const loginModal = document.getElementById("loginModal");
@@ -107,7 +124,7 @@ function initAuthModal() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Error al iniciar sesión");
+        showToast(data.error || "Error al iniciar sesión");
         return;
       }
 
@@ -117,7 +134,7 @@ function initAuthModal() {
       window.location.href = "/dashboard/dashboard.html";
     } catch (error) {
       console.error("Error login:", error);
-      alert("No se pudo iniciar sesión");
+      showToast("No se pudo iniciar sesión");
     }
   });
 
@@ -152,7 +169,7 @@ function initAuthModal() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Error al registrarse");
+        showToast(data.error || "Error al registrarse");
         return;
       }
 
@@ -162,7 +179,7 @@ function initAuthModal() {
       window.location.href = "/dashboard/dashboard.html";
     } catch (error) {
       console.error("Error registro:", error);
-      alert("No se pudo registrar el usuario");
+      showToast("No se pudo registrar el usuario");
     }
   });
 }
@@ -467,12 +484,12 @@ function initAddToMenu() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Debes iniciar sesión");
+      showToast("Debes iniciar sesión");
       return;
     }
 
     if (!selectedRecipe) {
-      alert("No hay ninguna receta seleccionada");
+      showToast("No hay ninguna receta seleccionada");
       return;
     }
 
@@ -480,7 +497,7 @@ function initAddToMenu() {
     const weekStart = weekSelect.value;
 
     if (!weekStart) {
-      alert("Selecciona una semana");
+      showToast("Selecciona una semana");
       return;
     }
 
@@ -523,7 +540,7 @@ function initAddToMenu() {
         });
 
         if (!replaceResponse.ok) {
-          alert("No se pudo reemplazar la receta");
+          showToast("No se pudo reemplazar la receta");
           return;
         }
 
@@ -532,14 +549,14 @@ function initAddToMenu() {
       }
 
       if (!response.ok) {
-        alert(data.error || "No se pudo añadir la receta");
+        showToast(data.error || "No se pudo añadir la receta");
         return;
       }
 
       showMenuMessage("Receta añadida al menú semanal ✅");
     } catch (error) {
       console.error(error);
-      alert("Error al guardar la receta en el menú");
+      showToast("Error al guardar la receta en el menú");
     }
   });
 }
@@ -552,7 +569,7 @@ function initSaveRecipe() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Debes iniciar sesión para guardar recetas");
+      showToast("Debes iniciar sesión para guardar recetas");
       return;
     }
 
@@ -575,19 +592,19 @@ function initSaveRecipe() {
       const data = await response.json();
 
       if (response.status === 409) {
-        alert("Esta receta ya está guardada");
+        showToast("Esta receta ya está guardada");
         return;
       }
 
       if (!response.ok) {
-        alert(data.error || "No se pudo guardar la receta");
+        showToast(data.error || "No se pudo guardar la receta");
         return;
       }
 
-      alert("Receta guardada correctamente ✅");
+      showToast("Receta guardada correctamente ✅");
     } catch (error) {
       console.error(error);
-      alert("Error guardando la receta");
+      showToast("Error guardando la receta");
     }
   });
 }

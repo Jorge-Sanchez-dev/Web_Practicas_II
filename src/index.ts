@@ -89,6 +89,15 @@ app.post("/api/auth/register", async (req, res) => {
       });
     }
 
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9]).{6,}$/;
+
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error:
+          "La contraseña debe tener al menos 6 caracteres, una letra y un símbolo.",
+      });
+    }
+
     if (Number(edad) <= 0) {
       return res.status(400).json({
         error: "La edad debe ser mayor que 0",
@@ -143,7 +152,7 @@ app.post("/api/auth/register", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     return res.status(201).json({
@@ -205,7 +214,7 @@ app.post("/api/auth/login", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     return res.json({
@@ -250,7 +259,7 @@ app.get("/api/recipes", async (req, res) => {
 
     if (query) {
       url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
-        String(query)
+        String(query),
       )}&number=${number}&apiKey=${API_KEY}`;
     } else {
       url = `https://api.spoonacular.com/recipes/random?number=${number}&apiKey=${API_KEY}`;
@@ -386,28 +395,28 @@ app.post("/api/weekly-menu", authMiddleware, async (req: any, res) => {
     }
 
     const index = menu.meals.findIndex(
-      (meal: any) => meal.day === day && meal.mealType === mealType
+      (meal: any) => meal.day === day && meal.mealType === mealType,
     );
 
     const replace = req.body.replace === true;
 
-if (index !== -1 && !replace) {
-  return res.status(409).json({
-    error: "Ya existe una receta en ese hueco del menú",
-    message: "¿Quieres reemplazar la receta existente?",
-    existingMeal: menu.meals[index],
-  });
-}
+    if (index !== -1 && !replace) {
+      return res.status(409).json({
+        error: "Ya existe una receta en ese hueco del menú",
+        message: "¿Quieres reemplazar la receta existente?",
+        existingMeal: menu.meals[index],
+      });
+    }
 
-if (index !== -1 && replace) {
-  menu.meals[index].day = day;
-  menu.meals[index].mealType = mealType;
-  menu.meals[index].recipeId = recipeId;
-  menu.meals[index].title = title;
-  menu.meals[index].image = image || "";
-} else {
-  menu.meals.push(newMeal as any);
-}
+    if (index !== -1 && replace) {
+      menu.meals[index].day = day;
+      menu.meals[index].mealType = mealType;
+      menu.meals[index].recipeId = recipeId;
+      menu.meals[index].title = title;
+      menu.meals[index].image = image || "";
+    } else {
+      menu.meals.push(newMeal as any);
+    }
 
     await menu.save();
 
@@ -511,24 +520,30 @@ app.get("/api/saved-recipes", authMiddleware, async (req: any, res) => {
     return res.json({ recipes });
   } catch (error) {
     console.error("Error obteniendo recetas guardadas:", error);
-    return res.status(500).json({ error: "Error obteniendo recetas guardadas" });
+    return res
+      .status(500)
+      .json({ error: "Error obteniendo recetas guardadas" });
   }
 });
 
 // ELIMINAR RECETA GUARDADA
-app.delete("/api/saved-recipes/:recipeId", authMiddleware, async (req: any, res) => {
-  try {
-    await SavedRecipe.findOneAndDelete({
-      userId: req.userId,
-      recipeId: Number(req.params.recipeId),
-    });
+app.delete(
+  "/api/saved-recipes/:recipeId",
+  authMiddleware,
+  async (req: any, res) => {
+    try {
+      await SavedRecipe.findOneAndDelete({
+        userId: req.userId,
+        recipeId: Number(req.params.recipeId),
+      });
 
-    return res.json({ message: "Receta eliminada correctamente" });
-  } catch (error) {
-    console.error("Error eliminando receta:", error);
-    return res.status(500).json({ error: "Error eliminando receta" });
-  }
-});
+      return res.json({ message: "Receta eliminada correctamente" });
+    } catch (error) {
+      console.error("Error eliminando receta:", error);
+      return res.status(500).json({ error: "Error eliminando receta" });
+    }
+  },
+);
 
 // RUTA FINAL PARA HTML
 app.use((req, res) => {
