@@ -376,8 +376,18 @@ function generateWeekOptions() {
   select.innerHTML = "";
 
   const months = [
-    "ene","feb","mar","abr","may","jun",
-    "jul","ago","sep","oct","nov","dic"
+    "ene",
+    "feb",
+    "mar",
+    "abr",
+    "may",
+    "jun",
+    "jul",
+    "ago",
+    "sep",
+    "oct",
+    "nov",
+    "dic",
   ];
 
   for (let i = 0; i < 8; i++) {
@@ -522,7 +532,7 @@ function initAddToMenu() {
 
       if (response.status === 409) {
         const confirmed = confirm(
-          `Ya tienes "${data.existingMeal.title}" en ese hueco.\n\n¿Quieres reemplazarla?`
+          `Ya tienes "${data.existingMeal.title}" en ese hueco.\n\n¿Quieres reemplazarla?`,
         );
 
         if (!confirmed) return;
@@ -641,8 +651,8 @@ async function loadDashboardSavedRecipes() {
     }
 
     container.innerHTML = recipes
-  .map(
-    (recipe) => `
+      .map(
+        (recipe) => `
       <article class="saved-recipe">
         <img
           src="${recipe.image}"
@@ -654,16 +664,14 @@ async function loadDashboardSavedRecipes() {
 
           <p>Receta guardada en tu colección.</p>
 
-          <a
-            href="/dashboard/Receta/receta.html?id=${recipe.recipeId}"
-          >
-            Ver receta
-          </a>
+          <a href="/receta.html?id=${recipe.recipeId}">
+  Ver receta
+</a>
         </div>
       </article>
-    `
-  )
-  .join("");
+    `,
+      )
+      .join("");
   } catch (error) {
     console.error(error);
   }
@@ -695,11 +703,14 @@ async function loadDashboardSummary() {
       savedRecipesCount.textContent = savedData.recipes.length;
     }
 
-    const menuResponse = await fetch(`/api/weekly-menu?weekStart=${weekStart}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const menuResponse = await fetch(
+      `/api/weekly-menu?weekStart=${weekStart}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     const menuData = await menuResponse.json();
 
@@ -707,11 +718,14 @@ async function loadDashboardSummary() {
       weeklyMealsCount.textContent = `${menuData.meals.length} / 21`;
     }
 
-    const shoppingResponse = await fetch(`/api/shopping-list?weekStart=${weekStart}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const shoppingResponse = await fetch(
+      `/api/shopping-list?weekStart=${weekStart}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     const shoppingData = await shoppingResponse.json();
 

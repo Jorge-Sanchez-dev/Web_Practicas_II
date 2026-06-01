@@ -3,88 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recetas | Plan Eat</title>
+    <title>Detalle receta | Plan Eat</title>
 
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./recetas.css" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../receta.css" />
   </head>
 
   <body class="dashboard-page">
     <div id="header"></div>
 
     <main>
-      <section class="recipes-section">
+      <section class="recipe-detail-section">
         <div class="container">
-          <div class="recipes-header">
-            <span class="section-label">RECETAS</span>
-            <h2>Busca recetas para tu menú semanal</h2>
-            <p>
-              Encuentra nuevas ideas y añádelas directamente a tu planificación.
-            </p>
-          </div>
-
-          <div class="recipes-search">
-            <input
-              type="text"
-              id="recipeSearchInput"
-              placeholder="Busca una receta, por ejemplo: pasta"
-            />
-            <button id="recipeSearchBtn" class="btn btn-primary">Buscar</button>
-          </div>
-
-          <div id="recipesMessage" class="recipes-message"></div>
-          <div id="recipesContainer" class="recipes-grid"></div>
+          <div id="recipeMessage" class="recipes-message"></div>
+          <div id="recipeContainer" class="recipe-detail"></div>
         </div>
       </section>
     </main>
 
     <div id="footer"></div>
 
-    <!--<script>
-      fetch("./header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("header").innerHTML = data;
-        });
-
-      fetch("./footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("footer").innerHTML = data;
-        });
-    </script>-->
-
-    <div id="menuModal" class="menu-modal">
-      <div class="menu-modal-content">
-        <button id="closeMenuModal" type="button">×</button>
-
-        <h3>Añadir receta al menú</h3>
-
-        <label for="menuWeekSelect">Semana</label>
-        <select id="menuWeekSelect"></select>
-
-        <label for="menuDaySelect">Día</label>
-        <select id="menuDaySelect">
-          <option value="lunes">Lunes</option>
-          <option value="martes">Martes</option>
-          <option value="miércoles">Miércoles</option>
-          <option value="jueves">Jueves</option>
-          <option value="viernes">Viernes</option>
-          <option value="sábado">Sábado</option>
-          <option value="domingo">Domingo</option>
-        </select>
-
-        <label for="menuMealSelect">Comida</label>
-        <select id="menuMealSelect">
-          <option value="desayuno">Desayuno</option>
-          <option value="comida">Comida</option>
-          <option value="cena">Cena</option>
-        </select>
-
-        <button id="saveMenuRecipeBtn" type="button">Guardar en menú</button>
-      </div>
-    </div>
-
     <script src="../script.js"></script>
+    <script src="../receta.js"></script>
   </body>
 </html>
