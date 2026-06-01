@@ -8,10 +8,25 @@ function showToast(message, type = "error") {
   }
 
   toast.textContent = message;
-  toast.className = `toast-message ${type} show`;
+  toast.className = `toast-message ${type}`;
+
+  toast.style.position = "fixed";
+  toast.style.top = "24px";
+  toast.style.right = "24px";
+  toast.style.padding = "14px 20px";
+  toast.style.borderRadius = "12px";
+  toast.style.color = "#fff";
+  toast.style.fontWeight = "700";
+  toast.style.zIndex = "999999";
+  toast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.2)";
+  toast.style.background = type === "success" ? "#16a34a" : "#dc2626";
+  toast.style.opacity = "1";
+  toast.style.transform = "translateY(0)";
+  toast.style.transition = "all 0.3s ease";
 
   setTimeout(() => {
-    toast.classList.remove("show");
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(-10px)";
   }, 3000);
 }
 
@@ -611,7 +626,7 @@ function initSaveRecipe() {
         return;
       }
 
-      showToast("Receta guardada correctamente ✅");
+      showToast("Receta guardada correctamente ✅", "success");
     } catch (error) {
       console.error(error);
       showToast("Error guardando la receta");
@@ -664,7 +679,7 @@ async function loadDashboardSavedRecipes() {
 
           <p>Receta guardada en tu colección.</p>
 
-          <a href="/receta.html?id=${recipe.recipeId}">
+          <a href="/dashboard/recetas.html?id=${recipe.recipeId}">
   Ver receta
 </a>
         </div>
@@ -684,7 +699,7 @@ async function loadDashboardSummary() {
 
   const savedRecipesCount = document.getElementById("savedRecipesCount");
   const weeklyMealsCount = document.getElementById("weeklyMealsCount");
-  const shoppingItemsCount = document.getElementById("shoppingItemsCount");
+  const shoppingItemsCount = document.getElementById("shoppingListCount");
 
   if (!savedRecipesCount && !weeklyMealsCount && !shoppingItemsCount) return;
 

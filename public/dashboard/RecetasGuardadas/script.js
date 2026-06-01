@@ -73,7 +73,7 @@ function createSavedRecipeCard(recipe) {
         </p>
 
         <div class="recipe-card-actions">
-          <a href="/receta.html?id=${recipe.recipeId}" class="recipe-card-link">
+          <a href="/dashboard/recetas.html?id=${recipe.recipeId}" class="recipe-card-link">
             Ver receta
           </a>
 
